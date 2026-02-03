@@ -1,8 +1,6 @@
 import React from 'react';
-
-import { Input } from '../../common/fields/inputs';
-import { Button } from '../../common/buttons';
-
+import { Input } from '@common/fields';
+import { Button } from '@common/buttons';
 import styles from './LoginPage.module.css';
 
 const validateIsEmpty = (value: string) => {
