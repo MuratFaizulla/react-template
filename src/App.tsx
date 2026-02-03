@@ -22,7 +22,7 @@ const MainRoutes = () => {
 };
 
 function App() {
-  const [isAuth, setIsAuth] = React.useState(false);
+  const [isAuth] = React.useState(false);
   return <BrowserRouter>{isAuth ? <MainRoutes /> : <AuthRoutes />}</BrowserRouter>;
 }
 
