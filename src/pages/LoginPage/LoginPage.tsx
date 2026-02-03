@@ -1,9 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { Input } from '@common/fields';
+import { Input, PasswordInput } from '@common/fields';
 import { Button } from '@common/buttons';
 import styles from './LoginPage.module.css';
-import { useNavigate } from 'react-router-dom';
 
 const validateIsEmpty = (value: string) => {
   if (!value) return 'field required';
@@ -63,10 +63,9 @@ export const LoginPage = () => {
           </div>
 
           <div className={styles.input_container}>
-            <Input
+            <PasswordInput
               value={formValues.password}
               placeholder='password'
-              type='password'
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 const password = event.target.value;
                 setFormValues({ ...formValues, password });
