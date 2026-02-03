@@ -7,7 +7,8 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': '/src',
-      '@common': '/src/common'
+      '@common': '/src/common',
+      '@pages': '/src/pages'
     }
   }
 });

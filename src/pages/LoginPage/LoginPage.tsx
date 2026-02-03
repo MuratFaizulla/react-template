@@ -1,7 +1,9 @@
 import React from 'react';
+
 import { Input } from '@common/fields';
 import { Button } from '@common/buttons';
 import styles from './LoginPage.module.css';
+import { useNavigate } from 'react-router-dom';
 
 const validateIsEmpty = (value: string) => {
   if (!value) return 'field required';
@@ -31,6 +33,7 @@ interface FormErrors {
 }
 
 export const LoginPage = () => {
+  const navigate = useNavigate();
   const [formValues, setFormValues] = React.useState({ username: '', password: '' });
   const [formErrors, setFormErrors] = React.useState<FormErrors>({
     username: null,
@@ -82,7 +85,14 @@ export const LoginPage = () => {
           </div>
         </div>
 
-        <div className={styles.sing_up_container}>Create new account</div>
+        <div
+          className={styles.sing_up_container}
+          onClick={() =>
+            navigate('/registration', { state: { username: formValues.username }, replace: true })
+          }
+        >
+          Create new account
+        </div>
       </div>
     </div>
   );
