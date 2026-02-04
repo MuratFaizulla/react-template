@@ -1,11 +1,11 @@
 import React from 'react';
 import styles from './Button.module.css';
 interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
-  isError?: boolean;
-  // You can add custom props here if needed
+  isLoading?: boolean;
 }
-export const Button: React.FC<ButtonProps> = ({ children, isError = false }) => {
-  return (
-    <button className={`${styles.button} ${isError ? styles.button_error : ''}`}>{children}</button>
-  );
-};
+export const Button: React.FC<ButtonProps> = ({ children, isLoading = false }) => (
+  <button className={styles.button}>
+    {!isLoading && children}
+    {isLoading && <div className={styles['dot-flashing']} />}
+  </button>
+);

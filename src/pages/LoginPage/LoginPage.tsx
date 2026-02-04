@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Input, PasswordInput } from '@common/fields';
+import { Input, PasswordInput, CheckBox } from '@common/fields';
 import { Button } from '@common/buttons';
 import styles from './LoginPage.module.css';
 
@@ -34,7 +34,11 @@ interface FormErrors {
 
 export const LoginPage = () => {
   const navigate = useNavigate();
-  const [formValues, setFormValues] = React.useState({ username: '', password: '' });
+  const [formValues, setFormValues] = React.useState({
+    username: '',
+    password: '',
+    notMyComputer: false
+  });
   const [formErrors, setFormErrors] = React.useState<FormErrors>({
     username: null,
     password: null
@@ -48,7 +52,7 @@ export const LoginPage = () => {
           <div className={styles.input_container}>
             <Input
               value={formValues.username}
-              placeholder='username'
+              label='username'
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 const username = event.target.value;
                 setFormValues({ ...formValues, username });
@@ -65,7 +69,7 @@ export const LoginPage = () => {
           <div className={styles.input_container}>
             <PasswordInput
               value={formValues.password}
-              placeholder='password'
+              label='password'
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 const password = event.target.value;
                 setFormValues({ ...formValues, password });
@@ -79,8 +83,18 @@ export const LoginPage = () => {
               })}
             />
           </div>
+          <div className={styles.input_container}>
+            <CheckBox
+              checked={formValues.notMyComputer}
+              label='This is not my device'
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                const notMyComputer = event.target.checked;
+                setFormValues({ ...formValues, notMyComputer });
+              }}
+            />
+          </div>
           <div>
-            <Button>Sign in</Button>
+            <Button isLoading>Sign in</Button>
           </div>
         </div>
 
