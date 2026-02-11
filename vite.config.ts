@@ -8,7 +8,8 @@ export default defineConfig({
     alias: {
       '@': '/src',
       '@common': '/src/common',
-      '@pages': '/src/pages'
+      '@pages': '/src/pages',
+      '@utils': '/src/utils'
     }
   }
 });

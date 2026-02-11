@@ -1,0 +1,8 @@
+:root {
+  /*colors*/
+  --primary: #f5c678;
+  --primary7: rgba(245, 198, 120, 0.7);
+
+  /*spacing*/
+  --spacing-1: 4px;
+}
