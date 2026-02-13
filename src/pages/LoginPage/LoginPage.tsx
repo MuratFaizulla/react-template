@@ -1,10 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { Input, PasswordInput, CheckBox } from '@common/fields';
 import { Button } from '@common/buttons';
-import { useMutation, useQueryLazy } from '@utils';
+import { api, setCookie, useMutation } from '@utils';
 
 import styles from './LoginPage.module.css';
-import { useNavigate } from 'react-router-dom';
 
 const validateIsEmpty = (value: string) => {
   if (!value) return 'field required';
@@ -21,7 +22,7 @@ const validatePassword = (value: string) => {
 
 const loginFormValidateSchema = {
   username: validateUsername,
-  password: validatePassword
+  password: validatePassword,
 };
 
 const validateLoginForm = (name: keyof typeof loginFormValidateSchema, value: string) => {
@@ -45,28 +46,34 @@ export const LoginPage = () => {
   const [formValues, setFormValues] = React.useState({
     username: '',
     password: '',
-    notMyComputer: false
+    isNotMyDevice: false,
   });
-  const { mutation: authMutation, isLoading: authLoading } = useMutation<typeof formValues, User>(
-    'http://localhost:4200/api/auth/login',
-    'post'
-  );
-  const { query } = useQueryLazy<User>('http://localhost:4200/api/auth/login');
-  console.log('query', query);
+
+  const { mutationAsync: authMutation, isLoading: authLoading } = useMutation<
+    typeof formValues,
+    ApiResponse<User[]>
+  >((values) => api.post('auth/login', values));
+  // const { data, isLoading } = useQuery<User[]>(() => api.get('users'));
+  // const { query, isLoading } = useQueryLazy<User[]>(() => api.get('users'));
+
   const [formErrors, setFormErrors] = React.useState<FormErrors>({
     username: null,
-    password: null
+    password: null,
   });
 
   return (
     <div className={styles.page}>
       <div className={styles.container}>
-        <div className={styles.container_header}>REACT</div>
+        <div className={styles.container_header}>DOGGEE</div>
         <form
           className={styles.form_container}
           onSubmit={async (event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
             const response = await authMutation(formValues);
+
+            if (!!response && formValues.isNotMyDevice) {
+              setCookie('doggee-isNotMyDevice', new Date().getTime() + 30 * 60000);
+            }
             // const response = await query();
             console.log('response', response);
           }}
@@ -85,7 +92,7 @@ export const LoginPage = () => {
               }}
               {...(!!formErrors.username && {
                 isError: !!formErrors.username,
-                helperText: formErrors.username
+                helperText: formErrors.username,
               })}
             />
           </div>
@@ -103,18 +110,18 @@ export const LoginPage = () => {
               }}
               {...(!!formErrors.password && {
                 isError: !!formErrors.password,
-                helperText: formErrors.password
+                helperText: formErrors.password,
               })}
             />
           </div>
           <div className={styles.input_container}>
             <CheckBox
               disabled={authLoading}
-              checked={formValues.notMyComputer}
+              checked={formValues.isNotMyDevice}
               label='This is not my device'
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                const notMyComputer = event.target.checked;
-                setFormValues({ ...formValues, notMyComputer });
+                const isNotMyDevice = event.target.checked;
+                setFormValues({ ...formValues, isNotMyDevice });
               }}
             />
           </div>

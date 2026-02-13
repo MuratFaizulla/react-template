@@ -1,9 +1,8 @@
 .button {
   height: 48px;
   width: 100%;
-  background-color: #f5c678;
-  /* background: var(--primary); */
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.15);
+  background: var(--color-accent);
+  box-shadow: var(--shadow-button);
   border-radius: 5px;
   display: flex;
   align-items: center;
@@ -14,14 +13,21 @@
   font-size: 14px;
   font-weight: 300;
   font-style: normal;
+  transition: var(--transition);
 }
+
 .button:hover {
-  background-color: #f5c678;
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.05);
+  background: var(--color-accent);
+  box-shadow: var(--shadow-button-hover);
 }
 
 .button:active {
-  box-shadow: rgba(245, 198, 120, 0.7);
+  background: var(--color-accent7);
+}
+
+.button:disabled {
+  background: var(--color-accent7);
+  box-shadow: var(--shadow-button-hover);
 }
 
 .dot-flashing {
