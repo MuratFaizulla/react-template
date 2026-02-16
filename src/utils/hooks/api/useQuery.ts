@@ -8,15 +8,15 @@ export const useQuery = <K>(request: () => Promise<any>, deps: React.DependencyL
   React.useEffect(() => {
     setIsLoading(true);
     try {
-            request().then(async (response) => {
+      request().then(async (response) => {
         setData(response.data);
         setIsLoading(false);
       });
     } catch (error) {
       setIsLoading(false);
       setError((error as Error).message);
-          }
+    }
   }, deps);
 
-  return { data, error, isLoading, status };
+  return { data, error, isLoading, status: error ? 'error' : isLoading ? 'loading' : 'success' };
 };

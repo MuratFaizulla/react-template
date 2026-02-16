@@ -8,7 +8,7 @@ export const useMutation = <T, K>(request: (body: T) => Promise<K>) => {
   const mutation = React.useCallback((body: T): void => {
     setIsLoading(true);
     try {
-            request(body).then((response) => {
+      request(body).then((response) => {
         setIsLoading(false);
         setData(response);
       });
@@ -24,9 +24,9 @@ export const useMutation = <T, K>(request: (body: T) => Promise<K>) => {
     } catch (error) {
       setIsLoading(false);
       setError((error as Error).message);
-          } finally {
+    } finally {
       setIsLoading(false);
     }
   }, []);
-    return { mutation, mutationAsync, data, error, isLoading };
+  return { mutation, mutationAsync, data, error, isLoading };
 };

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Input, PasswordInput, CheckBox } from '@common/fields';
 import { Button } from '@common/buttons';
 import { api, setCookie, useMutation } from '@utils';
+import { IntlText } from '@features';
 
 import styles from './LoginPage.module.css';
 
@@ -22,7 +23,7 @@ const validatePassword = (value: string) => {
 
 const loginFormValidateSchema = {
   username: validateUsername,
-  password: validatePassword,
+  password: validatePassword
 };
 
 const validateLoginForm = (name: keyof typeof loginFormValidateSchema, value: string) => {
@@ -46,25 +47,25 @@ export const LoginPage = () => {
   const [formValues, setFormValues] = React.useState({
     username: '',
     password: '',
-    isNotMyDevice: false,
+    isNotMyDevice: false
   });
 
   const { mutationAsync: authMutation, isLoading: authLoading } = useMutation<
     typeof formValues,
     ApiResponse<User[]>
-  >((values) => api.post('auth/login', values));
+  >((values) => api.post('auth', values));
   // const { data, isLoading } = useQuery<User[]>(() => api.get('users'));
   // const { query, isLoading } = useQueryLazy<User[]>(() => api.get('users'));
 
   const [formErrors, setFormErrors] = React.useState<FormErrors>({
     username: null,
-    password: null,
+    password: null
   });
 
   return (
     <div className={styles.page}>
       <div className={styles.container}>
-        <div className={styles.container_header}>DOGGEE</div>
+        <div className={styles.container_header}>REACT</div>
         <form
           className={styles.form_container}
           onSubmit={async (event: React.FormEvent<HTMLFormElement>) => {
@@ -92,7 +93,7 @@ export const LoginPage = () => {
               }}
               {...(!!formErrors.username && {
                 isError: !!formErrors.username,
-                helperText: formErrors.username,
+                helperText: formErrors.username
               })}
             />
           </div>
@@ -110,7 +111,7 @@ export const LoginPage = () => {
               }}
               {...(!!formErrors.password && {
                 isError: !!formErrors.password,
-                helperText: formErrors.password,
+                helperText: formErrors.password
               })}
             />
           </div>
@@ -127,13 +128,13 @@ export const LoginPage = () => {
           </div>
           <div>
             <Button isLoading={authLoading} type='submit'>
-              Sign in
+              <IntlText path='button.signIn' />
             </Button>
           </div>
         </form>
 
         <div className={styles.sing_up_container} onClick={() => navigate('/registration')}>
-          Create new account
+          <IntlText path='page.login.createNewAccont' />
         </div>
       </div>
     </div>

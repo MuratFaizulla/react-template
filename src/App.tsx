@@ -2,7 +2,8 @@ import React from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 
 import { LoginPage, NotFoundPage, RegistrationPage } from '@pages';
-import { deleteCookie, getCookie } from '@utils';
+import { deleteCookie, getCookie, getLocale, getMessages } from '@utils/helpers';
+import { IntlProvider } from '@features';
 
 import './App.css';
 
@@ -23,6 +24,8 @@ const MainRoutes = () => (
 function App() {
   const [isAuth, setIsAuth] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
+  const [messages, setMessages] = React.useState({});
+  const locale = getLocale();
 
   React.useEffect(() => {
     const authCookie = getCookie('doggee-auth-token');
@@ -38,12 +41,19 @@ function App() {
       setIsAuth(true);
     }
 
-    setIsLoading(false);
+    getMessages(locale).then((messages) => {
+      setMessages(messages);
+      setIsLoading(false);
+    });
   }, []);
 
   if (isLoading) return null;
 
-  return <BrowserRouter>{isAuth ? <MainRoutes /> : <AuthRoutes />}</BrowserRouter>;
+  return (
+    <IntlProvider locale={locale} messages={messages}>
+      <BrowserRouter>{isAuth ? <MainRoutes /> : <AuthRoutes />}</BrowserRouter>
+    </IntlProvider>
+  );
 }
 
 export default App;

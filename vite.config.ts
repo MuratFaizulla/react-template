@@ -9,7 +9,11 @@ export default defineConfig({
       '@': '/src',
       '@common': '/src/common',
       '@pages': '/src/pages',
-      '@utils': '/src/utils'
+      '@static': '/src/static',
+      '@utils': '/src/utils',
+      '@utils/helpers': '/src/utils/helpers',
+      '@utils/hooks': '/src/utils/hooks',
+      '@features': '/src/features'
     }
   }
 });

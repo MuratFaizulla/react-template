@@ -1,5 +1,5 @@
 type BaseUrl = string;
-const baseUrl: BaseUrl = 'http://localhost:4200/api';
+const baseUrl: BaseUrl = 'http://localhost:3000/api/';
 
 export class API {
   readonly baseUrl: BaseUrl;
