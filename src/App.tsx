@@ -3,8 +3,8 @@ import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 
 import { LoginPage, NotFoundPage, RegistrationPage } from '@pages';
 import { deleteCookie, getCookie, getLocale, getMessages } from '@utils/helpers';
-import { IntlProvider } from '@features';
-
+import { IntlProvider, ThemeProvider } from '@features';
+import type { Theme } from '@features';
 import './App.css';
 
 const AuthRoutes = () => (
@@ -49,10 +49,19 @@ function App() {
 
   if (isLoading) return null;
 
+  // const theme =
+  // getCookie('doggee-theme') ??
+  // (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+  // ? 'dark' : 'light';
+  // console.log('theme', window.matchMedia ('prefers-color-scheme: dark'));
+
+  const theme = (getCookie('doggee-theme') as Theme) ?? 'dark';
   return (
-    <IntlProvider locale={locale} messages={messages}>
-      <BrowserRouter>{isAuth ? <MainRoutes /> : <AuthRoutes />}</BrowserRouter>
-    </IntlProvider>
+    <ThemeProvider theme={theme}>
+      <IntlProvider locale={locale} messages={messages}>
+        <BrowserRouter>{isAuth ? <MainRoutes /> : <AuthRoutes />}</BrowserRouter>
+      </IntlProvider>
+    </ThemeProvider>
   );
 }
 

@@ -13,7 +13,8 @@ export default defineConfig({
       '@utils': '/src/utils',
       '@utils/helpers': '/src/utils/helpers',
       '@utils/hooks': '/src/utils/hooks',
-      '@features': '/src/features'
+      '@features': '/src/features',
+      '@features/*': '/src/features/*'
     }
   }
 });

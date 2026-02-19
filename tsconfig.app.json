@@ -31,7 +31,8 @@
       "@utils/helpers": ["src/utils/helpers"],
       "@utils/hooks": ["src/utils/hooks"],
       "@utils/contexts": ["src/utils/contexts"],
-      "@features": ["src/features"]
+      "@features": ["src/features"],
+      "@features/*": ["./features/*"]
     }
   },
   "include": ["src"]
