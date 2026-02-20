@@ -1,4 +1,17 @@
 {
+  "field.input.username.label": "Логин",
+  "field.input.password.label": "Пароль",
+  "field.input.passwordAgain.label": "Повтор пароля",
+  "field.checkbox.isNotMyDevice.label": "Не мой компьютер",
+  "button.signIn": "Войти",
+  "button.done": "Готово",
   "page.login.createNewAccont": "Создать новый аккаунт",
-  "button.signIn": "Войти"
+  "page.registration.fillYourLoginData": "Введите данные для входа",
+  "page.registration.iAlreadyHaveAnAccount": "У меня уже есть аккаунт",
+  "page.registration.passwordRules.containNumbers": "Должен содержать <rule>минимум одну цифру</rule>",
+  "page.registration.passwordRules.containUppercase": "Должен содержать <rule>минимум одну заглавную букву</rule>",
+  "page.registration.passwordRules.containLowerCase": "Должен содержать <rule>минимум одну строчную букву</rule>",
+  "page.registration.passwordRules.contain8Characters": "Должен содержать не менее <rule>8 символов</rule>",
+  "page.registration.passwordRules.mustMatch": "Пароли должны <rule>совпадать</rule>",
+  "validations.required": "Поле обязательно для заполнения"
 }

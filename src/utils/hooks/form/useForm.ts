@@ -1,9 +1,10 @@
 import React from 'react';
 
-interface UseFormParams<Values extends object> {
+type ValidationReturn = string | null;
+interface UseFormParams<Values> {
   initialValues: Values;
   validateSchema?: {
-    [K in keyof Values]?: (value: Values[K]) => string | null;
+    [K in keyof Values]?: (value: Pick<Values, K>[K]) => ValidationReturn;
   };
   validateOnChange?: boolean;
   onSubmit?: (values: Values) => void;
@@ -15,29 +16,47 @@ export const useForm = <Values extends object>({
   validateOnChange = true,
   onSubmit
 }: UseFormParams<Values>) => {
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [isSubminting, setIsSubmiting] = React.useState(false);
   const [values, setValues] = React.useState(initialValues);
   const [errors, setErrors] = React.useState<{ [K in keyof Values]?: string } | null>(null);
 
-  const setFieldValue = <K extends keyof Values>(field: K, value: Values[K]) => {
+  const setFieldValue = <K extends keyof Values>(field: K, value: Pick<Values, K>[K]) => {
     setValues({ ...values, [field]: value });
 
     const validateSchemaExistForField = !!validateSchema && !!validateSchema[field];
     if (!validateSchemaExistForField || !validateOnChange) return;
 
-    // @ts-expect-error: поле может быть undefined, проверка выше гарантирует вызов функции
-    const error = validateSchema[field](value);
+    const error = validateSchema[field]!(value);
     setErrors({ ...errors, [field]: error });
   };
 
-  const setFieldsError = <K extends keyof Values>(field: K, error: Values[K]) => {
+  const setFieldsError = <K extends keyof Values>(field: K, error: Pick<Values, K>[K]) => {
     setErrors({ ...errors, [field]: error });
   };
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
-    setIsSubmitting(true);
-    if (onSubmit) onSubmit(values);
+
+    if (!validateSchema) {
+      setIsSubmiting(true);
+      return !!onSubmit && onSubmit(values);
+    }
+
+    let isErrorExist = false;
+    let errors = {};
+    Object.keys(values).forEach((field) => {
+      if (!validateSchema[field as keyof Values]) return;
+      const error = validateSchema[field as keyof Values]!(values[field as keyof Values]);
+      if (error) isErrorExist = true;
+      errors = {
+        ...errors,
+        [field]: error
+      };
+    });
+    setErrors(errors);
+    if (isErrorExist) return;
+    setIsSubmiting(true);
+    return !!onSubmit && onSubmit(values);
   };
 
   return {
@@ -46,7 +65,7 @@ export const useForm = <Values extends object>({
     setFieldValue,
     setFieldsError,
     handleSubmit,
-    isSubmitting,
-    setIsSubmitting
+    isSubminting,
+    setIsSubmiting
   };
 };

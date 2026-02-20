@@ -13,11 +13,10 @@ export const useIntl = () => {
     if (!values) return intl.messages[path];
 
     let translate = intl.messages[path];
-    for (const key in values) {
-      if (Object.prototype.hasOwnProperty.call(values, key)) {
-        translate = translate.replace(`{${key}}`, String(values[key]));
-      }
-    }
+
+    Object.keys(values).forEach((key) => {
+      translate = translate.replace(`{${key}}`, String(values[key]));
+    });
 
     return translate;
   };

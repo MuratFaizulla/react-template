@@ -14,10 +14,10 @@ export const useQuery = <K>(
     const fetchData = async () => {
       setIsLoading(true);
       setError('');
-      
+
       try {
         const response = await request();
-        
+
         if (!isCancelled) {
           if (response.success) {
             // ApiSuccessResponse - берем data

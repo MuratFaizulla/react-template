@@ -1,8 +1,6 @@
 import React from 'react';
 
-export const useQueryLazy = <K>(
-  request: () => Promise<ApiResponse<K>>
-) => {
+export const useQueryLazy = <K>(request: () => Promise<ApiResponse<K>>) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState('');
   const [data, setData] = React.useState<K | null>(null);

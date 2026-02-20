@@ -3,8 +3,9 @@ import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 
 import { LoginPage, NotFoundPage, RegistrationPage } from '@pages';
 import { deleteCookie, getCookie, getLocale, getMessages } from '@utils/helpers';
-import { IntlProvider, ThemeProvider } from '@features';
-import type { Theme } from '@features';
+import { IntlProvider, ThemeProvider, type Theme } from '@features';
+import { COOKIE_NAMES } from '@utils/constants';
+
 import './App.css';
 
 const AuthRoutes = () => (
@@ -28,13 +29,15 @@ const App = () => {
   const locale = getLocale();
 
   React.useEffect(() => {
-    const authCookie = getCookie('doggee-auth-token');
-    const isNotMyDevice = getCookie('doggee-isNotMyDevice');
+    const authCookie = getCookie(COOKIE_NAMES.AUTH_TOKEN);
+    const isNotMyDevice = getCookie(COOKIE_NAMES.IS_NOT_MY_DEVICE);
 
     const deviceExpire = isNotMyDevice && new Date().getTime() > new Date(+isNotMyDevice).getTime();
     if (authCookie && deviceExpire) {
       deleteCookie('doggee-auth-token');
       deleteCookie('doggee-isNotMyDevice');
+      deleteCookie(COOKIE_NAMES.AUTH_TOKEN);
+      deleteCookie(COOKIE_NAMES.IS_NOT_MY_DEVICE);
     }
 
     if (authCookie && !deviceExpire) {
@@ -49,13 +52,8 @@ const App = () => {
 
   if (isLoading) return null;
 
-  // const theme =
-  // getCookie('doggee-theme') ??
-  // (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
-  // ? 'dark' : 'light';
-  // console.log('theme', window.matchMedia ('prefers-color-scheme: dark'));
+  const theme = (getCookie(COOKIE_NAMES.THEME) as Theme) ?? 'light';
 
-  const theme = (getCookie('doggee-theme') as Theme) ?? 'dark';
   return (
     <ThemeProvider theme={theme}>
       <IntlProvider locale={locale} messages={messages}>

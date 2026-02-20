@@ -1,32 +1,27 @@
-
-
 export const setCookie = (
   name: string,
   value: string | number | boolean | null,
-  props: CookieOptions = {}
+  props: $TSFixMe = {}
 ) => {
-  const cookieOptions: CookieOptions = { ...props };
+  const cookieOptions: $TSFixMe = props;
 
-  if (typeof cookieOptions.expires === 'number') {
+  if (typeof props.expires === 'number' && props.expires) {
     const date = new Date();
-    date.setTime(date.getTime() + cookieOptions.expires * 1000);
+    date.setTime(date.getTime() + props.expires * 1000);
     cookieOptions.expires = date;
   }
 
-  let updatedCookie = `${encodeURIComponent(name)}=${encodeURIComponent(
-    value !== null ? String(value) : ''
-  )}`;
+  if (props.expires && props.expires.toUTCString) {
+    cookieOptions.expires = props.expires.toUTCString();
+  }
 
-  Object.entries(cookieOptions).forEach(([propName, propValue]) => {
-    if (!propValue) return;
-
+  const cookieValue = value ? encodeURIComponent(value) : null;
+  let updatedCookie = `${name}=${cookieValue}`;
+  Object.keys(cookieOptions).forEach((propName) => {
     updatedCookie += `; ${propName}`;
-    if (propValue !== true && propValue !== '') {
-      if (propValue instanceof Date) {
-        updatedCookie += `=${propValue.toUTCString()}`;
-      } else {
-        updatedCookie += `=${propValue}`;
-      }
+    const propValue = cookieOptions[propName];
+    if (propValue !== true) {
+      updatedCookie += `=${propValue}`;
     }
   });
 

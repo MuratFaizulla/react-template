@@ -1,4 +1,17 @@
 {
+  "field.input.username.label": "Пайдаланушы аты",
+  "field.input.password.label": "Құпия сөз",
+  "field.input.passwordAgain.label": "Құпия сөзді қайта енгізу",
+  "field.checkbox.isNotMyDevice.label": "Бұл менің құрылғым емес",
+  "button.signIn": "Кіру",
+  "button.done": "Дайын",
   "page.login.createNewAccont": "Жаңа аккаунт жасау",
-  "button.signIn": "Кіру"
+  "page.registration.fillYourLoginData": "Кіру деректерін толтырыңыз",
+  "page.registration.iAlreadyHaveAnAccount": "Менде бұрыннан аккаунт бар",
+  "page.registration.passwordRules.containNumbers": "Кемінде <rule>1 сан</rule> болуы керек",
+  "page.registration.passwordRules.containUppercase": "Кемінде <rule>1 бас әріп</rule> болуы керек",
+  "page.registration.passwordRules.containLowerCase": "Кемінде <rule>1 кіші әріп</rule> болуы керек",
+  "page.registration.passwordRules.contain8Characters": "Кемінде <rule>8 таңба</rule> болуы керек",
+  "page.registration.passwordRules.mustMatch": "Құпия сөздер <rule>сәйкес келуі</rule> керек",
+  "validations.required": "Бұл өріс міндетті түрде толтырылуы керек"
 }
