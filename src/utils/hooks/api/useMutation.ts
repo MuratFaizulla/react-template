@@ -1,32 +1,43 @@
 import React from 'react';
 
-export const useMutation = <T, K>(request: (body: T) => Promise<K>) => {
+export const useMutation = <TVariables, TData>(
+  request: (variables: TVariables) => Promise<ApiResponse<TData>>
+) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState('');
-  const [data, setData] = React.useState<K | null>(null);
+  const [data, setData] = React.useState<TData | null>(null);
 
-  const mutation = React.useCallback((body: T): void => {
-    setIsLoading(true);
-    try {
-      request(body).then((response) => {
+  const mutationAsync = React.useCallback(
+    async (variables: TVariables) => {
+      setIsLoading(true);
+      setError('');
+
+      try {
+        const response = await request(variables);
+
+        if (response.success) {
+          setData(response.data);
+          setIsLoading(false);
+          return response.data;
+        } else {
+          setError(response.data.message);
+          setIsLoading(false);
+          return null;
+        }
+      } catch (e) {
         setIsLoading(false);
-        setData(response);
-      });
-    } catch (error) {
-      setIsLoading(false);
-      setError((error as Error).message);
-    }
+        setError((e as Error).message);
+        return null;
+      }
+    },
+    [request]
+  );
+
+  const reset = React.useCallback(() => {
+    setData(null);
+    setError('');
+    setIsLoading(false);
   }, []);
-  const mutationAsync = React.useCallback(async (body: T): Promise<K | undefined> => {
-    setIsLoading(true);
-    try {
-      return await request(body);
-    } catch (error) {
-      setIsLoading(false);
-      setError((error as Error).message);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-  return { mutation, mutationAsync, data, error, isLoading };
+
+  return { mutationAsync, data, error, isLoading, reset };
 };

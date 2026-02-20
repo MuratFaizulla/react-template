@@ -1,34 +1,34 @@
+
+
 export const setCookie = (
   name: string,
   value: string | number | boolean | null,
-  props: $TSFixMe = {}
+  props: CookieOptions = {}
 ) => {
-  const cookieOptions: $TSFixMe = props;
+  const cookieOptions: CookieOptions = { ...props };
 
-  if (typeof props.expires == 'number' && props.expires) {
+  if (typeof cookieOptions.expires === 'number') {
     const date = new Date();
-    date.setTime(date.getTime() + props.expires * 1000);
+    date.setTime(date.getTime() + cookieOptions.expires * 1000);
     cookieOptions.expires = date;
   }
 
-  if (props.expires && props.expires.toUTCString) {
-    cookieOptions.expires = props.expires.toUTCString();
-  }
+  let updatedCookie = `${encodeURIComponent(name)}=${encodeURIComponent(
+    value !== null ? String(value) : ''
+  )}`;
 
-  const cookieValue = value ? encodeURIComponent(value) : null;
-  let updatedCookie = name + '=' + cookieValue;
+  Object.entries(cookieOptions).forEach(([propName, propValue]) => {
+    if (!propValue) return;
 
-  for (const propName in cookieOptions) {
-    if (propName) {
-      updatedCookie += '; ' + propName;
-
-      const propValue = cookieOptions[propName];
-
-      if (propValue !== true) {
-        updatedCookie += '=' + propValue;
+    updatedCookie += `; ${propName}`;
+    if (propValue !== true && propValue !== '') {
+      if (propValue instanceof Date) {
+        updatedCookie += `=${propValue.toUTCString()}`;
+      } else {
+        updatedCookie += `=${propValue}`;
       }
     }
-  }
+  });
 
   document.cookie = updatedCookie;
 };

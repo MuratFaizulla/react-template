@@ -20,7 +20,7 @@ export const IntlText: React.FC<IntlTextProps> = ({ path, values, children }) =>
     const keys = Object.keys(values);
     const functionalKeys = keys.filter((key) => typeof values[key] === 'function');
     const [key, ...restKeys] = functionalKeys;
-    const htmlRegex = new RegExp(`<${key}>(.*?)<\/${key}>`, 'gm');
+    const htmlRegex = new RegExp(`<${key}>(.*?)</${key}>`, 'gm');
     const [contentWithTag, content] = htmlRegex.exec(message) ?? [];
 
     if (!contentWithTag) return message;

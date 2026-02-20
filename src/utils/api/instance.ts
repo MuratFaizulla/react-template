@@ -32,7 +32,7 @@ export class API {
     return this.request<T>(endpoint, { ...options, method: 'GET' });
   }
 
-  post<T>(endpoint: string, body: Record<string, any>, options: RequestInit = {}) {
+  post<T>(endpoint: string, body: Record<string, unknown>, options: RequestInit = {}) {
     return this.request<T>(endpoint, {
       ...options,
       method: 'POST',

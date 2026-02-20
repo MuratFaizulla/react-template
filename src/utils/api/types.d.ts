@@ -11,4 +11,10 @@ interface ApiFailureResponse {
 }
 
 type ApiResponse<T> = ApiSuccessResponse<T> | ApiFailureResponse;
-declare type $TSFixMe = any;
+interface CookieOptions {
+  expires?: number | Date;
+  path?: string;
+  domain?: string;
+  secure?: boolean;
+  [key: string]: string | number | boolean | Date | undefined;
+}

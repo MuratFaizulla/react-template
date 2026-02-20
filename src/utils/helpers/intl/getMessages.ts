@@ -5,7 +5,7 @@ export const getMessages = async (locale: AcceptLocales) => {
   try {
     const messages = await import(`../../../static/locales/${locale}.json`);
     return messages.default;
-  } catch (e) {
+  } catch {
     const defaultMessages = await import(`../../../static/locales/${DEFAULT_LOCALE}.json`);
     return defaultMessages.default;
   }

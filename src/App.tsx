@@ -21,7 +21,7 @@ const MainRoutes = () => (
   </Routes>
 );
 
-function App() {
+const App = () => {
   const [isAuth, setIsAuth] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
   const [messages, setMessages] = React.useState({});
@@ -45,7 +45,7 @@ function App() {
       setMessages(messages);
       setIsLoading(false);
     });
-  }, []);
+  }, [locale]);
 
   if (isLoading) return null;
 
@@ -63,6 +63,6 @@ function App() {
       </IntlProvider>
     </ThemeProvider>
   );
-}
+};
 
 export default App;
