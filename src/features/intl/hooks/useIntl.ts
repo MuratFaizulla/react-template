@@ -21,5 +21,5 @@ export const useIntl = () => {
     return translate;
   };
 
-  return { locale: intl.locale, translateMessage };
+  return { locale: intl.locale, translateMessage, setLocale: intl.setLocale };
 };
