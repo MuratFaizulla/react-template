@@ -25,7 +25,7 @@ A clean, scalable, and production-ready starter template for building React appl
 ### Installation
 
 ```bash
-git clone https://github.com/your-username/react-template.git
+git clone https://github.com/MuratFaizulla/react-template.git
 cd react-template
 npm install
 ```
@@ -54,8 +54,8 @@ npm run preview
 
 | Command | Description |
 |---------|-------------|
-| `npm run dev` | Start dev server |
-| `npm run build` | Build for production |
+| `npm run dev` | Start dev server (localhost:5173) |
+| `npm run build` | Type-check + build for production |
 | `npm run preview` | Preview production build |
 | `npm run lint` | Run ESLint |
 | `npx prettier . --write` | Format all files |
@@ -77,10 +77,9 @@ src/
 ├── pages/              # Route-level page components
 ├── static/             # Static assets
 │   ├── css/            # Global styles & fonts
-│   ├── fonts/          # Font files
 │   ├── images/         # Image assets
 │   ├── locales/        # Translation files (ru, kk, en-US)
-│   └── theme/          # CSS variables per theme
+│   └── theme/          # CSS Modules per theme (light / dark)
 ├── utils/              # Utilities, hooks, helpers
 │   ├── api/            # HTTP client (fetch-based)
 │   ├── constants/      # App-wide constants
@@ -94,7 +93,7 @@ src/
 
 ## Path Aliases
 
-Configured in both `vite.config.ts` and `tsconfig.app.json`.
+Configured in `vite.config.ts`.
 
 ```typescript
 // Instead of relative paths
@@ -108,17 +107,16 @@ import { LoginPage } from '@pages';
 
 | Alias | Resolves to |
 |-------|-------------|
-| `@/*` | `src/*` |
-| `@common/*` | `src/common/*` |
-| `@pages` | `src/pages` |
-| `@static/*` | `src/static/*` |
-| `@utils` | `src/utils` |
-| `@utils/constants` | `src/utils/constants` |
-| `@utils/api` | `src/utils/api` |
-| `@utils/helpers` | `src/utils/helpers` |
-| `@utils/hooks` | `src/utils/hooks` |
-| `@utils/contexts` | `src/utils/contexts` |
-| `@features` | `src/features` |
+| `@` | `src/` |
+| `@common` | `src/common/` |
+| `@pages` | `src/pages/` |
+| `@static` | `src/static/` |
+| `@utils` | `src/utils/` |
+| `@utils/constants` | `src/utils/constants/` |
+| `@utils/api` | `src/utils/api/` |
+| `@utils/helpers` | `src/utils/helpers/` |
+| `@utils/hooks` | `src/utils/hooks/` |
+| `@features` | `src/features/` |
 
 ---
 
@@ -126,11 +124,9 @@ import { LoginPage } from '@pages';
 
 Built-in lightweight i18n system supporting **Russian**, **Kazakh**, and **English**.
 
-Translation files are located in `src/static/locales/`.
+Translation files are in `src/static/locales/`. Locale is auto-detected from `navigator.language`, falls back to `ru`.
 
 **Supported locales:** `ru` · `kk` · `en-US`
-
-The locale is detected automatically from `navigator.language`. Falls back to `ru` if not supported.
 
 ### Usage
 
@@ -138,7 +134,7 @@ The locale is detected automatically from `navigator.language`. Falls back to `r
 // Simple text
 <IntlText path='button.signIn' />
 
-// With values
+// With variable substitution
 <IntlText path='page.greeting' values={{ name: 'Murat' }} />
 
 // With rich text tags
@@ -146,12 +142,17 @@ The locale is detected automatically from `navigator.language`. Falls back to `r
   path='page.registration.passwordRules.containNumbers'
   values={{ rule: (text) => <strong>{text}</strong> }}
 />
+
+// Programmatic
+const { translateMessage } = useIntl();
+const label = translateMessage('field.input.username.label');
 ```
 
-Translation keys support inline tag interpolation:
+Translation key format in JSON:
 
 ```json
 {
+  "button.signIn": "Sign in",
   "page.registration.passwordRules.containNumbers": "Must contain <rule>at least one number</rule>"
 }
 ```
@@ -160,9 +161,7 @@ Translation keys support inline tag interpolation:
 
 ## Theming
 
-Supports **light** and **dark** themes via CSS custom properties.
-
-Theme is persisted in a cookie and applied via `ThemeProvider`.
+Supports **light** and **dark** themes. Theme is persisted in a cookie and applied by `ThemeProvider` via CSS Modules.
 
 ```tsx
 import { useTheme } from '@features';
@@ -171,7 +170,7 @@ const { theme, setTheme } = useTheme();
 setTheme('dark');
 ```
 
-Theme variables are defined in:
+Theme CSS variables are in:
 - `src/static/theme/light/light.module.css`
 - `src/static/theme/dark/dark.module.css`
 
@@ -181,50 +180,60 @@ Theme variables are defined in:
 
 ### `useForm`
 
-Lightweight form state manager with validation.
+Lightweight form state manager with per-field validation.
 
 ```tsx
-const { values, errors, setFieldValue, handleSubmit } = useForm({
-  initialValues: { email: '', password: '' },
+const { values, errors, setFieldValue, handleSubmit, isSubmitting } = useForm({
+  initialValues: { username: '', password: '' },
   validateSchema: {
-    email: (value) => (!value ? 'Required' : null),
+    username: (value) => (!value ? 'Required' : null),
     password: (value) => (!value ? 'Required' : null),
   },
-  onSubmit: (values) => console.log(values),
+  validateOnChange: false,
+  onSubmit: (values) => api.post('auth', values),
 });
 ```
+
+`validateSchema` maps each field to a function returning `string | null` (null = valid).
 
 ### `useMutation`
 
 For POST/PUT/DELETE requests with loading and error state.
 
 ```tsx
-const { mutationAsync, isLoading, error } = useMutation((values) =>
-  api.post('auth/login', values)
+const { mutationAsync, isLoading, error, reset } = useMutation(
+  (values) => api.post('auth/login', values)
 );
+
+const data = await mutationAsync({ username, password });
 ```
 
 ### `useQuery`
 
-For GET requests that run on mount.
+Fires on mount, cancels on unmount.
 
 ```tsx
-const { data, isLoading, error } = useQuery(() => api.get('users'));
+const { data, isLoading, error } = useQuery(
+  () => api.get('users'),
+  [userId] // re-fetch when userId changes
+);
 ```
 
 ### `useQueryLazy`
 
-Like `useQuery`, but triggered manually.
+Same as `useQuery` but triggered manually.
 
 ```tsx
 const { query, data, isLoading } = useQueryLazy(() => api.get('profile'));
+
+await query(); // call when needed
 ```
 
 ---
 
 ## HTTP Client
 
-A thin wrapper around the native `fetch` API located in `src/utils/api/instance.ts`.
+A thin wrapper around the native `fetch` API in `src/utils/api/instance.ts`. Sends cookies with every request (`credentials: 'include'`). Base URL: `http://localhost:3000/api/`.
 
 ```typescript
 // GET
@@ -234,38 +243,113 @@ const response = await api.get<User[]>('users');
 const response = await api.post<User>('auth/login', { username, password });
 ```
 
-All responses follow a unified `ApiResponse<T>` type:
+All responses follow a unified type:
 
 ```typescript
 type ApiResponse<T> = ApiSuccessResponse<T> | ApiFailureResponse;
+
+// Success
+{ success: true,  data: T,                  status: number }
+
+// Failure
+{ success: false, data: { message: string }, status: number }
 ```
+
+---
+
+## Auth Flow
+
+Auth state is determined on app load by reading the `react-template-auth-token` cookie.
+
+- **Unauthenticated** → `AuthRoutes` (`/auth`, `/registration`)
+- **Authenticated** → `MainRoutes`
+
+After a successful login, call `onAuthSuccess()` — the app switches to `MainRoutes` without a page reload.
+
+Session expiry is controlled by the `react-template-isNotMyDevice` cookie (30-minute TTL when "not my device" is checked).
+
+---
+
+## Git Workflow
+
+Direct pushes to `main` are blocked by a local `pre-push` hook and GitHub branch protection rules.
+
+```bash
+# 1. Create a feature branch
+git checkout -b feat/your-feature
+
+# 2. Make changes and commit
+git add .
+git commit -m "feat: your feature description"
+
+# 3. Push the branch
+git push origin feat/your-feature
+
+# 4. Open a PR on GitHub → main
+```
+
+### Branch naming
+
+| Prefix | When to use |
+|--------|-------------|
+| `feat/` | New feature |
+| `fix/` | Bug fix |
+| `refactor/` | Refactoring |
+| `chore/` | Config, tooling, dependencies |
+| `docs/` | Documentation |
+
+---
+
+## Git Aliases
+
+Configured in global `~/.gitconfig`:
+
+| Alias | Command |
+|-------|---------|
+| `git lg` | `log --oneline --graph --decorate --all` |
+| `git st` | `status` |
+| `git co` | `checkout` |
+| `git br` | `branch` |
+| `git ps` | `push` |
+| `git cm` | `commit` |
+| `git pl` | `pull` |
+| `git ad` | `add` |
+| `git sh` | `stash` |
+| `git df` | `diff` |
+| `git rb` | `rebase` |
+
+---
+
+## Git Config
+
+| Setting | Value | Effect |
+|---------|-------|--------|
+| `pull.rebase` | `true` | `git pull` uses rebase instead of merge — keeps history linear |
+| `rebase.autoStash` | `true` | Auto-stashes uncommitted changes before rebase, restores after |
+| `rerere.enabled` | `true` | Remembers conflict resolutions and reapplies them automatically |
 
 ---
 
 ## Commit Convention
 
-This project follows [Conventional Commits](https://www.conventionalcommits.org/).
+Follows [Conventional Commits](https://www.conventionalcommits.org/).
 
 | Type | Description |
 |------|-------------|
 | `feat` | New feature |
 | `fix` | Bug fix |
 | `refactor` | Code refactoring without behavior change |
-| `style` | Formatting only (no logic changes) |
+| `style` | Formatting only |
 | `chore` | Config, dependencies, tooling |
 | `docs` | Documentation changes |
-| `test` | Tests |
 | `perf` | Performance improvement |
 | `build` | Build system changes |
 | `ci` | CI/CD changes |
 | `revert` | Revert a previous commit |
 
-**Examples:**
-
 ```bash
 feat: add user profile page
 fix: resolve token expiration on refresh
-refactor: extract form validation to shared hook
 chore: upgrade vite to v7
 docs: update README with theming section
 ```
@@ -274,7 +358,7 @@ docs: update README with theming section
 
 ## Deployment
 
-The project includes a `vercel.json` configuration for deploying to [Vercel](https://vercel.com/) with client-side routing support.
+Includes `vercel.json` for deploying to [Vercel](https://vercel.com/) with SPA routing support.
 
 ```json
 {
