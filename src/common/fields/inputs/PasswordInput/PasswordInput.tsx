@@ -27,9 +27,7 @@ export const PasswordInput: React.FC<InputProps> = ({
           ref={inputRef}
           className={inputStyles.input}
           onChange={(e) => {
-            if (!!onChange && !e.target.value) return onChange(e);
-            if (!onChange || !/^[a-zA-Z0-9!;,.]+$/g.test(e.target.value)) return;
-            onChange(e);
+            if (onChange) onChange(e);
           }}
           {...props}
         />

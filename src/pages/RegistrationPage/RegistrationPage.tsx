@@ -13,7 +13,8 @@ import styles from './RegistrationPage.module.css';
 
 const registrationFormValidateSchema = {
   username: (value: string) => validateIsEmpty(value),
-  password: (value: string) => validateIsEmpty(value)
+  password: (value: string) => validateIsEmpty(value),
+  passwordAgain: (value: string) => validateIsEmpty(value)
 };
 
 interface RegistrationFormValues {
@@ -29,15 +30,8 @@ export const RegistrationPage: React.FC = () => {
     initialValues: { username: '', password: '', passwordAgain: '' },
     validateSchema: registrationFormValidateSchema,
     validateOnChange: false,
-    onSubmit: async (values) => {
-      console.log('values', values);
-      //   const response = await authMutation(values);
-
-      //   if (!!response && values.isNotMyDevice) {
-      //     setCookie(COOKIE_NAMES.IS_NOT_MY_DEVICE, new Date().getTime() + 30 * 60000);
-      //   }
-      // const response = await query();
-      //   console.log('response', response);
+    onSubmit: async (_values) => {
+      // TODO: wire up registration API call
     }
   });
 
@@ -91,9 +85,9 @@ export const RegistrationPage: React.FC = () => {
                   setFieldValue('passwordAgain', passwordAgain);
                 }}
                 {...(!!errors &&
-                  !!errors.password && {
-                    isError: !!errors.password,
-                    helperText: errors.password
+                  !!errors.passwordAgain && {
+                    isError: !!errors.passwordAgain,
+                    helperText: errors.passwordAgain
                   })}
               />
             </div>

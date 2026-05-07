@@ -5,6 +5,7 @@ import { Button } from '@common/buttons';
 
 import { api, setCookie, useForm, useMutation } from '@utils';
 import { IntlText } from '@features';
+import { COOKIE_NAMES } from '@utils/constants';
 
 import styles from './LoginPage.module.css';
 
@@ -33,26 +34,29 @@ interface User {
   password: string;
 }
 
-export const LoginPage = () => {
+interface LoginPageProps {
+  onAuthSuccess: () => void;
+}
+
+export const LoginPage = ({ onAuthSuccess }: LoginPageProps) => {
   const navigate = useNavigate();
 
-  const { mutationAsync: authMutation, isLoading: authLoading } = useMutation<
-    FormValues,
-    ApiResponse<User[]>
-  >((values) => api.post('auth', values));
-  console.log('authLoading', authLoading);
+  const { mutationAsync: authMutation } = useMutation<FormValues, User[]>(
+    (values) => api.post('auth', values)
+  );
+
   const { values, errors, setFieldValue, handleSubmit } = useForm<FormValues>({
     initialValues: { username: '', password: '', isNotMyDevice: false },
     validateSchema: loginFormValidateSchema,
     validateOnChange: false,
     onSubmit: async (values) => {
-      console.log('values', values);
       const response = await authMutation(values);
 
       if (response && values.isNotMyDevice) {
-        setCookie('doggee-isNotMyDevice', new Date().getTime() + 30 * 60000);
+        setCookie(COOKIE_NAMES.IS_NOT_MY_DEVICE, new Date().getTime() + 30 * 60000);
       }
-      console.log('response', response);
+
+      if (response) onAuthSuccess();
     }
   });
 

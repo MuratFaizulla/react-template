@@ -16,7 +16,7 @@ export const useForm = <Values extends object>({
   validateOnChange = true,
   onSubmit
 }: UseFormParams<Values>) => {
-  const [isSubminting, setIsSubmiting] = React.useState(false);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [values, setValues] = React.useState(initialValues);
   const [errors, setErrors] = React.useState<{ [K in keyof Values]?: string } | null>(null);
 
@@ -38,7 +38,7 @@ export const useForm = <Values extends object>({
     event.preventDefault();
 
     if (!validateSchema) {
-      setIsSubmiting(true);
+      setIsSubmitting(true);
       return !!onSubmit && onSubmit(values);
     }
 
@@ -55,7 +55,7 @@ export const useForm = <Values extends object>({
     });
     setErrors(errors);
     if (isErrorExist) return;
-    setIsSubmiting(true);
+    setIsSubmitting(true);
     return !!onSubmit && onSubmit(values);
   };
 
@@ -65,7 +65,7 @@ export const useForm = <Values extends object>({
     setFieldValue,
     setFieldsError,
     handleSubmit,
-    isSubminting,
-    setIsSubmiting
+    isSubmitting,
+    setIsSubmitting
   };
 };

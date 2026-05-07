@@ -42,7 +42,7 @@ export const useQuery = <K>(
       isCancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [request, ...deps]);
+  }, deps);
 
   return { data, error, isLoading };
 };

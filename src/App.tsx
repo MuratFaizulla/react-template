@@ -8,9 +8,9 @@ import { COOKIE_NAMES } from '@utils/constants';
 
 import './App.css';
 
-const AuthRoutes = () => (
+const AuthRoutes = ({ onAuthSuccess }: { onAuthSuccess: () => void }) => (
   <Routes>
-    <Route path='/auth' element={<LoginPage />} />
+    <Route path='/auth' element={<LoginPage onAuthSuccess={onAuthSuccess} />} />
     <Route path='/registration' element={<RegistrationPage />} />
     <Route path='*' element={<Navigate to='/auth' />} />
   </Routes>
@@ -34,8 +34,6 @@ const App = () => {
 
     const deviceExpire = isNotMyDevice && new Date().getTime() > new Date(+isNotMyDevice).getTime();
     if (authCookie && deviceExpire) {
-      deleteCookie('doggee-auth-token');
-      deleteCookie('doggee-isNotMyDevice');
       deleteCookie(COOKIE_NAMES.AUTH_TOKEN);
       deleteCookie(COOKIE_NAMES.IS_NOT_MY_DEVICE);
     }
@@ -57,7 +55,9 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <IntlProvider locale={locale} messages={messages}>
-        <BrowserRouter>{isAuth ? <MainRoutes /> : <AuthRoutes />}</BrowserRouter>
+        <BrowserRouter>
+          {isAuth ? <MainRoutes /> : <AuthRoutes onAuthSuccess={() => setIsAuth(true)} />}
+        </BrowserRouter>
       </IntlProvider>
     </ThemeProvider>
   );

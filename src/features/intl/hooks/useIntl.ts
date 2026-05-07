@@ -15,7 +15,7 @@ export const useIntl = () => {
     let translate = intl.messages[path];
 
     Object.keys(values).forEach((key) => {
-      translate = translate.replace(`{${key}}`, String(values[key]));
+      translate = translate.replaceAll(`{${key}}`, String(values[key]));
     });
 
     return translate;
