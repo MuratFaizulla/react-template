@@ -54,7 +54,7 @@ Data-fetching hooks in `src/utils/hooks/api/`:
 
 ### Form Handling (`src/utils/hooks/form/useForm.ts`)
 
-`useForm<Values>({ initialValues, validateSchema, validateOnChange, onSubmit })` returns `{ values, errors, setFieldValue, setFieldsError, handleSubmit, isSubminting, setIsSubmiting }`.
+`useForm<Values>({ initialValues, validateSchema, validateOnChange, onSubmit })` returns `{ values, errors, setFieldValue, setFieldsError, handleSubmit, isSubmitting, setIsSubmitting }`.
 
 `validateSchema` maps field keys to validator functions returning `string | null`.
 
@@ -73,3 +73,19 @@ Reusable UI: `Button`, `Input`, `PasswordInput`, `CheckBox`. Each uses CSS Modul
 - `locales/` — i18n JSON files
 - `theme/light/` and `theme/dark/` — theme CSS modules and SVG assets (icons change per theme)
 - `css/` — global CSS and font imports
+
+## Git Workflow
+
+Direct pushes to `main` are blocked by a local `pre-push` hook. Always work in a feature branch:
+
+```bash
+git checkout -b feat/your-feature   # create branch from main
+# ... make changes, commit ...
+git push origin feat/your-feature   # push branch
+# then open a PR on GitHub → main
+```
+
+Branch naming: `feat/`, `fix/`, `chore/`, `refactor/` prefixes.
+
+To enable the same protection on GitHub (block merges without PR), go to:
+**Settings → Branches → Add rule → Branch name: `main` → Require a pull request before merging**.
