@@ -13,6 +13,8 @@
   "page.registration.passwordRules.containLowerCase": "contain <rule>lowercase</rule> letter",
   "page.registration.passwordRules.contain8Characters": "contain at least <rule>8</rule> characters",
   "page.registration.passwordRules.mustMatch": "Password must <rule>match</rule>",
-
-  "validations.required": "field required"
+  "validations.required": "field required",
+  "header.theme.light": "Light",
+  "header.theme.dark": "Dark",
+  "footer.copyright": "© {year} React Template. All rights reserved."
 }

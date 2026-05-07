@@ -13,5 +13,8 @@
   "page.registration.passwordRules.containLowerCase": "Кемінде <rule>1 кіші әріп</rule> болуы керек",
   "page.registration.passwordRules.contain8Characters": "Кемінде <rule>8 таңба</rule> болуы керек",
   "page.registration.passwordRules.mustMatch": "Құпия сөздер <rule>сәйкес келуі</rule> керек",
-  "validations.required": "Бұл өріс міндетті түрде толтырылуы керек"
+  "validations.required": "Бұл өріс міндетті түрде толтырылуы керек",
+  "header.theme.light": "Жарық",
+  "header.theme.dark": "Қараңғы",
+  "footer.copyright": "© {year} React Template. Барлық құқықтар қорғалған."
 }

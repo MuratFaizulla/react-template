@@ -1,8 +1,14 @@
 import React from 'react';
+import type { AcceptLocales } from '@utils/helpers';
 
 export interface IntlContextProps {
-  locale: string;
+  locale: AcceptLocales;
   messages: Record<string, string>;
+  setLocale: (locale: AcceptLocales) => void;
 }
 
-export const IntlContext = React.createContext<IntlContextProps>({ locale: 'en-US', messages: {} });
+export const IntlContext = React.createContext<IntlContextProps>({
+  locale: 'ru',
+  messages: {},
+  setLocale: () => {}
+});

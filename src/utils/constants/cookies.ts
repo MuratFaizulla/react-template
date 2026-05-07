@@ -3,5 +3,6 @@ const COOKIE_PREFIX = 'react-template';
 export const COOKIE_NAMES = {
   AUTH_TOKEN: `${COOKIE_PREFIX}-auth-token`,
   THEME: `${COOKIE_PREFIX}-theme`,
-  IS_NOT_MY_DEVICE: `${COOKIE_PREFIX}-isNotMyDevice`
+  IS_NOT_MY_DEVICE: `${COOKIE_PREFIX}-isNotMyDevice`,
+  LOCALE: `${COOKIE_PREFIX}-locale`
 };
