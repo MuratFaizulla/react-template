@@ -1,9 +1,17 @@
+interface CookieOptions {
+  expires?: number | Date | string;
+  path?: string;
+  domain?: string;
+  secure?: boolean;
+  [key: string]: string | number | boolean | Date | undefined;
+}
+
 export const setCookie = (
   name: string,
   value: string | number | boolean | null,
-  props: $TSFixMe = {}
+  props: CookieOptions = {}
 ) => {
-  const cookieOptions: $TSFixMe = props;
+  const cookieOptions: CookieOptions = { ...props };
 
   if (typeof props.expires === 'number' && props.expires) {
     const date = new Date();
@@ -11,7 +19,7 @@ export const setCookie = (
     cookieOptions.expires = date;
   }
 
-  if (props.expires && props.expires.toUTCString) {
+  if (props.expires instanceof Date && props.expires.toUTCString) {
     cookieOptions.expires = props.expires.toUTCString();
   }
 
