@@ -16,5 +16,11 @@
   "validations.required": "field required",
   "header.theme.light": "Light",
   "header.theme.dark": "Dark",
-  "footer.copyright": "© {year} React Template. All rights reserved."
+  "footer.copyright": "© {year} React Template. All rights reserved.",
+  "home.welcome": "Welcome back",
+  "home.subtitle": "Your template is ready to go",
+  "home.stats.users": "Users",
+  "home.stats.sessions": "Sessions",
+  "home.stats.uptime": "Uptime",
+  "home.stats.requests": "Requests"
 }

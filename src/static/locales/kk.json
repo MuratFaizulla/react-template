@@ -16,5 +16,11 @@
   "validations.required": "Бұл өріс міндетті түрде толтырылуы керек",
   "header.theme.light": "Жарық",
   "header.theme.dark": "Қараңғы",
-  "footer.copyright": "© {year} React Template. Барлық құқықтар қорғалған."
+  "footer.copyright": "© {year} React Template. Барлық құқықтар қорғалған.",
+  "home.welcome": "Қош келдіңіз",
+  "home.subtitle": "Үлгіңіз жұмысқа дайын",
+  "home.stats.users": "Пайдаланушылар",
+  "home.stats.sessions": "Сессиялар",
+  "home.stats.uptime": "Аптайм",
+  "home.stats.requests": "Сұраулар"
 }

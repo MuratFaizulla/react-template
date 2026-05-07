@@ -1,23 +1,24 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 
-import { LoginPage, NotFoundPage, RegistrationPage } from '@pages';
+import { HomePage, LoginPage, NotFoundPage, RegistrationPage } from '@pages';
 import { deleteCookie, getCookie, getLocale, getMessages } from '@utils/helpers';
 import { IntlProvider, ThemeProvider, Layout, type Theme } from '@features';
-import { COOKIE_NAMES } from '@utils/constants';
+import { COOKIE_NAMES, ROUTES } from '@utils/constants';
 
 import './App.css';
 
 const AuthRoutes = ({ onAuthSuccess }: { onAuthSuccess: () => void }) => (
   <Routes>
-    <Route path='/auth' element={<LoginPage onAuthSuccess={onAuthSuccess} />} />
-    <Route path='/registration' element={<RegistrationPage />} />
-    <Route path='*' element={<Navigate to='/auth' />} />
+    <Route path={ROUTES.AUTH} element={<LoginPage onAuthSuccess={onAuthSuccess} />} />
+    <Route path={ROUTES.REGISTRATION} element={<RegistrationPage />} />
+    <Route path='*' element={<Navigate to={ROUTES.AUTH} />} />
   </Routes>
 );
 
 const MainRoutes = () => (
   <Routes>
+    <Route path={ROUTES.HOME} element={<HomePage />} />
     <Route path='*' element={<NotFoundPage />} />
   </Routes>
 );
@@ -56,7 +57,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <IntlProvider locale={locale} messages={messages}>
         <BrowserRouter>
-          <Layout>
+          <Layout isAuth={isAuth}>
             {isAuth ? <MainRoutes /> : <AuthRoutes onAuthSuccess={() => setIsAuth(true)} />}
           </Layout>
         </BrowserRouter>

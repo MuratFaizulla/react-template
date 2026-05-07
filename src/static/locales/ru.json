@@ -16,5 +16,11 @@
   "validations.required": "Поле обязательно для заполнения",
   "header.theme.light": "Светлая",
   "header.theme.dark": "Тёмная",
-  "footer.copyright": "© {year} React Template. Все права защищены."
+  "footer.copyright": "© {year} React Template. Все права защищены.",
+  "home.welcome": "Добро пожаловать",
+  "home.subtitle": "Ваш шаблон готов к работе",
+  "home.stats.users": "Пользователи",
+  "home.stats.sessions": "Сессии",
+  "home.stats.uptime": "Аптайм",
+  "home.stats.requests": "Запросы"
 }
