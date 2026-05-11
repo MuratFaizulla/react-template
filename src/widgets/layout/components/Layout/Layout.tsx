@@ -7,12 +7,11 @@ import styles from './Layout.module.css';
 
 interface LayoutProps {
   children: React.ReactNode;
-  isAuth?: boolean;
 }
 
-export const Layout: React.FC<LayoutProps> = ({ children, isAuth = false }) => (
+export const Layout: React.FC<LayoutProps> = ({ children }) => (
   <div className={styles.layout}>
-    <Header isAuth={isAuth} />
+    <Header />
     <main className={styles.content}>{children}</main>
     <Footer />
   </div>
