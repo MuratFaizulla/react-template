@@ -2,11 +2,10 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { IntlText, useIntl } from '@features';
-import { useForm } from '@utils/hooks';
-import { Input, PasswordInput } from '@common/fields';
-import { Button } from '@common/buttons';
-import { ROUTES } from '@utils/constants';
-import { validateIsEmpty } from '@utils/helpers';
+import { useForm, validateIsEmpty } from '@shared';
+import { Input, PasswordInput } from '@shared/ui/fields';
+import { Button } from '@shared/ui/buttons';
+import { ROUTES } from '@shared/config';
 
 import { PasswordRules } from './PasswordRules/PasswordRules';
 import styles from './RegistrationPage.module.css';

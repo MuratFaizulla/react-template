@@ -20,134 +20,43 @@ All aliases resolve from `src/`:
 | Alias | Path |
 |---|---|
 | `@` | `src/` |
-| `@common` | `src/common/` |
+| `@app` | `src/app/` |
 | `@pages` | `src/pages/` |
-| `@static` | `src/static/` |
-| `@utils` | `src/utils/` |
-| `@utils/constants` | `src/utils/constants/` |
-| `@utils/api` | `src/utils/api/` |
-| `@utils/helpers` | `src/utils/helpers/` |
-| `@utils/hooks` | `src/utils/hooks/` |
+| `@widgets` | `src/widgets/` |
 | `@features` | `src/features/` |
+| `@shared` | `src/shared/` |
+| `@shared/ui` | `src/shared/ui/` |
+| `@shared/api` | `src/shared/api/` |
+| `@shared/config` | `src/shared/config/` |
+| `@shared/lib` | `src/shared/lib/` |
+| `@static` | `src/static/` |
 
 ---
 
-## Architecture — Simplified FSD (Feature-Sliced Design)
+## Architecture — Full FSD (Feature-Sliced Design)
 
-This project uses a **simplified FSD** architecture. FSD divides code into layers where each layer has a strict responsibility and can only import from layers below it.
+This project uses **canonical FSD** architecture. Each layer can only import from layers below it.
 
-### Layer rules (MUST follow):
+### Layer hierarchy (top → bottom):
 
 ```
-pages      → can import from features, common, utils
-features   → can import from common, utils
-common     → can import from utils only — NO features imports
-utils      → no internal project imports
+app → pages → widgets → features → shared
 ```
 
 **Never import a higher layer into a lower one.**
-Example: `common` must NOT import from `features`. If a component needs `useTheme` or `useIntl` — it belongs in `features`, not `common`.
 
 ---
 
-### Layer: `src/common/`
+### Layer: `src/app/`
 
-**Pure UI components with no business logic and no feature dependencies.**
-
-Use for: buttons, inputs, checkboxes, modals, cards — anything that only receives props.
+**Application entry point: router, providers, global setup.**
 
 ```
-src/common/
-  buttons/
-    Button/
-      Button.tsx
-      Button.module.css
-    index.ts
-  fields/
-    inputs/
-      Input/
-        Input.tsx
-        Input.module.css
-      PasswordInput/
-        PasswordInput.tsx
-        PasswordInput.module.css
-      CheckBox/
-        CheckBox.tsx
-        CheckBox.module.css
-      index.ts
-    index.ts
+src/app/
+  App.tsx        ← root component (router + providers)
+  App.css
+  index.ts
 ```
-
-**Rules for `common` components:**
-- Each component lives in its own folder named after it
-- CSS Module is co-located in the same folder as the component
-- Group-level `index.ts` re-exports everything
-- Must NOT use `useTheme`, `useIntl`, or any feature hook
-- Must NOT import from `@features`
-
----
-
-### Layer: `src/features/`
-
-**Self-contained feature modules with their own state, context, hooks, and components.**
-
-Use for: anything that has its own context/provider, uses other feature hooks, or has business logic.
-
-Each feature follows this internal structure:
-
-```
-src/features/
-  theming/
-    context/
-      ThemeContext.ts
-      ThemeProvider.tsx
-      index.ts
-    hooks/
-      useTheme.ts
-      index.ts
-    index.ts
-  intl/
-    context/
-      IntlContext.ts
-      IntlProvider.tsx
-      index.ts
-    hooks/
-      useIntl.ts
-      index.ts
-    components/
-      IntlText.tsx
-      index.ts
-    index.ts
-  layout/
-    components/
-      Header/
-        Header.tsx
-        Header.module.css
-      Footer/
-        Footer.tsx
-        Footer.module.css
-      Layout/
-        Layout.tsx
-        Layout.module.css
-      index.ts
-    index.ts
-```
-
-**Rules for `features`:**
-- Each feature folder has its own `index.ts` barrel export
-- Sub-folders (`context/`, `hooks/`, `components/`) each have their own `index.ts`
-- All features are re-exported from `src/features/index.ts`
-- Components with state or feature-hook dependencies go here, NOT in `common`
-- Import features via `@features`: `import { useTheme } from '@features'`
-
-**How to decide: `common` vs `features`?**
-
-| Question | Answer |
-|---|---|
-| Does it use `useTheme`, `useIntl`, or any context? | → `features` |
-| Does it only receive props, no feature hooks? | → `common` |
-| Does it have its own Context/Provider? | → `features` |
-| Is it a pure UI primitive (button, input)? | → `common` |
 
 ---
 
@@ -174,37 +83,145 @@ src/pages/
 **Rules for `pages`:**
 - Each page in its own folder
 - Sub-components only used by that page live inside the page folder
-- Can import from `@features`, `@common`, `@utils`
+- Can import from `@widgets`, `@features`, `@shared`
 
 ---
 
-### Layer: `src/utils/`
+### Layer: `src/widgets/`
 
-**Pure utilities: no React components, no context, no business logic.**
+**Composite UI blocks that assemble features into page sections.**
+
+Use for: Header, Footer, Sidebar, Layout wrappers — components that use multiple features.
 
 ```
-src/utils/
-  api/
-    instance.ts      ← API class and api instance
-    index.ts
-  constants/
-    cookies.ts       ← COOKIE_NAMES
-    routes.ts        ← ROUTES
-    validations.ts   ← MIN_LENGTH etc.
-    index.ts
-  helpers/
-    cookies/         ← getCookie, setCookie, deleteCookie
-    intl/            ← getLocale, getMessages
-    valdiations/     ← validateIsEmpty
-    index.ts
-  hooks/
-    api/             ← useQuery, useQueryLazy, useMutation
-    form/            ← useForm
+src/widgets/
+  layout/
+    components/
+      Header/
+        Header.tsx
+        Header.module.css
+      Footer/
+        Footer.tsx
+        Footer.module.css
+      Layout/
+        Layout.tsx
+        Layout.module.css
+      index.ts
     index.ts
   index.ts
 ```
 
+**Rules for `widgets`:**
+- Can import from `@features` and `@shared`
+- Cannot import from `@pages`
+- Import via `@widgets`: `import { Layout } from '@widgets'`
+
 ---
+
+### Layer: `src/features/`
+
+**Self-contained feature modules with their own state, context, hooks, and components.**
+
+Use for: anything that has its own context/provider, uses other feature hooks, or has business logic.
+
+```
+src/features/
+  theming/
+    context/
+      ThemeContext.ts
+      ThemeProvider.tsx
+      index.ts
+    hooks/
+      useTheme.ts
+      index.ts
+    index.ts
+  intl/
+    context/
+      IntlContext.ts
+      IntlProvider.tsx
+      index.ts
+    hooks/
+      useIntl.ts
+      index.ts
+    components/
+      IntlText.tsx
+      index.ts
+    index.ts
+```
+
+**Rules for `features`:**
+- Each feature folder has its own `index.ts` barrel export
+- Sub-folders (`context/`, `hooks/`, `components/`) each have their own `index.ts`
+- All features are re-exported from `src/features/index.ts`
+- Can import from `@shared` only
+- Import via `@features`: `import { useTheme } from '@features'`
+
+**How to decide: `shared/ui` vs `features`?**
+
+| Question | Answer |
+|---|---|
+| Does it use `useTheme`, `useIntl`, or any context? | → `features` |
+| Does it only receive props, no feature hooks? | → `shared/ui` |
+| Does it have its own Context/Provider? | → `features` |
+| Is it a pure UI primitive (button, input)? | → `shared/ui` |
+
+---
+
+### Layer: `src/shared/`
+
+**Reusable primitives with no business logic. Base layer — imports nothing from above.**
+
+```
+src/shared/
+  ui/                        ← pure UI components (no hooks, no context)
+    buttons/
+      Button/
+        Button.tsx
+        Button.module.css
+      index.ts
+    fields/
+      inputs/
+        Input/Input.tsx
+        PasswordInput/PasswordInput.tsx
+        CheckBox/CheckBox.tsx
+        index.ts
+      index.ts
+    index.ts
+  api/                       ← API class and api instance
+    instance.ts
+    index.ts
+  config/                    ← constants: COOKIE_NAMES, ROUTES, MIN_LENGTH
+    cookies.ts
+    routes.ts
+    validations.ts
+    index.ts
+  lib/                       ← pure helpers and hooks
+    cookies/                 ← getCookie, setCookie, deleteCookie
+    intl/                    ← getLocale, getMessages
+    validations/             ← validateIsEmpty
+    hooks/
+      api/                   ← useQuery, useQueryLazy, useMutation
+      form/                  ← useForm
+      index.ts
+    index.ts
+  index.ts
+```
+
+**Rules for `shared`:**
+- `shared/ui` components must NOT use `useTheme`, `useIntl`, or any feature hook
+- `shared/ui` must NOT import from `@features` or `@widgets`
+- Import via `@shared`: `import { api, useForm } from '@shared'`
+- Import sub-paths: `import { Button } from '@shared/ui/buttons'`
+
+---
+
+### Adding a new widget — checklist
+
+1. Create folder `src/widgets/your-widget/`
+2. Add `components/` sub-folder with component files
+3. Each sub-folder gets its own `index.ts`
+4. Create `src/widgets/your-widget/index.ts`
+5. Add `export * from './your-widget'` to `src/widgets/index.ts`
 
 ### Adding a new feature — checklist
 
@@ -214,23 +231,23 @@ src/utils/
 4. Create `src/features/your-feature/index.ts` that re-exports everything
 5. Add `export * from './your-feature'` to `src/features/index.ts`
 
-### Adding a new common component — checklist
+### Adding a new shared/ui component — checklist
 
-1. Create folder `src/common/group/ComponentName/`
+1. Create folder `src/shared/ui/group/ComponentName/`
 2. Add `ComponentName.tsx` and `ComponentName.module.css` inside
 3. Export from the group `index.ts`
-4. Component must NOT import from `@features`
+4. Component must NOT import from `@features` or `@widgets`
 
 ### Adding a new page — checklist
 
 1. Create folder `src/pages/PageName/`
 2. Add `PageName.tsx` (and `PageName.module.css` if needed)
 3. Export from `src/pages/index.ts`
-4. Add route in `src/App.tsx`
+4. Add route in `src/app/App.tsx`
 
 ---
 
-## API Layer (`src/utils/api/`)
+## API Layer (`src/shared/api/`)
 
 `API` class wraps `fetch` with `credentials: 'include'`. Base URL is `http://localhost:3000/api/`.
 
@@ -238,7 +255,7 @@ src/utils/
 type ApiResponse<T> = ApiSuccessResponse<T> | ApiFailureResponse;
 ```
 
-Data-fetching hooks in `src/utils/hooks/api/`:
+Data-fetching hooks in `src/shared/lib/hooks/api/`:
 - `useQuery(request, deps)` — fires on mount, re-fires when deps change, cancels on unmount
 - `useQueryLazy(request)` — fires manually via returned `query()` function
 - `useMutation(request)` — returns `mutationAsync`, `isLoading`, `error`, `reset`
@@ -271,6 +288,115 @@ Data-fetching hooks in `src/utils/hooks/api/`:
 
 ---
 
+## CSS Modules
+
+All component styles use CSS Modules (`.module.css`). Rules:
+- File co-located with the component in the same folder
+- Class names use `snake_case`: `.form_container`, `.input_container`
+- No global class names inside modules — everything is scoped
+- Import as `styles`: `import styles from './Button.module.css'`
+
+```tsx
+<div className={styles.page}>
+  <div className={styles.form_container}>
+```
+
+---
+
+## TypeScript Conventions
+
+- Interfaces for object shapes: `interface LoginPageProps { onAuthSuccess: () => void }`
+- `type` for unions, aliases: `type Theme = 'light' | 'dark'`
+- No `any` — use generics or proper types
+- Global declarations (shared across the codebase) go in `src/@types/*.d.ts`
+- Component props type declared just above the component: `interface Props { ... }`
+- Always type the return of functions that aren't obvious
+
+---
+
+## Barrel Exports
+
+Every folder that exposes multiple things has an `index.ts`:
+
+```
+shared/ui/buttons/
+  Button/Button.tsx
+  index.ts          ← export * from './Button/Button'
+```
+
+Import via the folder, never via the internal file path:
+```ts
+import { Button } from '@shared/ui/buttons';    // correct
+import { Button } from '@shared/ui/buttons/Button/Button';  // wrong
+```
+
+---
+
+## Naming Conventions
+
+| What | Convention | Example |
+|------|-----------|---------|
+| Components | `PascalCase` | `LoginPage`, `Button` |
+| Hooks | `camelCase` + `use` prefix | `useForm`, `useTheme` |
+| Constants | `UPPER_SNAKE_CASE` | `COOKIE_NAMES`, `ROUTES` |
+| CSS classes | `snake_case` | `.form_container` |
+| Files/folders | `PascalCase` for components, `camelCase` for hooks/utils | `Button.tsx`, `useForm.ts` |
+| i18n keys | dot-notation | `"page.login.title"` |
+
+---
+
+## Component Patterns
+
+### Page component
+
+```tsx
+export const LoginPage = ({ onAuthSuccess }: LoginPageProps) => {
+  // hooks at the top
+  // derived state / memos
+  // handlers
+  // render
+};
+```
+
+### Feature with context
+
+Each feature that needs global state uses React Context + Provider pattern:
+1. `context/FeatureContext.ts` — creates the context with default value
+2. `context/FeatureProvider.tsx` — manages state, wraps children
+3. `hooks/useFeature.ts` — consumes context, throws if used outside provider
+4. `index.ts` — re-exports everything
+
+### Validation schema
+
+```ts
+const validateSchema = {
+  username: (value: string) => (!value ? 'Required' : null),
+  password: (value: string) => (value.length < 8 ? 'Too short' : null),
+};
+```
+
+---
+
+## Adding a new entity (future: `src/entities/`)
+
+When the project grows to include domain models (Patient, Doctor, Appointment for a dental CRM), add a new `entities/` layer between `features` and `shared`:
+
+```
+app → pages → widgets → features → entities → shared
+```
+
+Entity structure:
+```
+src/entities/
+  patient/
+    model/          ← types, interfaces
+    api/            ← API calls for this entity
+    ui/             ← entity-specific UI (PatientCard)
+    index.ts
+```
+
+---
+
 ## Git Workflow
 
 Direct pushes to `main` are blocked. Always use a feature branch → PR:
@@ -283,3 +409,13 @@ git push origin feat/your-feature
 ```
 
 Branch naming: `feat/`, `fix/`, `chore/`, `refactor/`, `docs/` prefixes.
+
+### Commit convention
+
+```
+feat: add patient search page
+fix: resolve token expiration on refresh
+refactor: migrate to full FSD architecture
+chore: update vite config aliases
+docs: update README with FSD architecture
+```

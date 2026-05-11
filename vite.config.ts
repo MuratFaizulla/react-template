@@ -7,16 +7,16 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': '/src',
-      '@common': '/src/common',
+      '@app': '/src/app',
       '@pages': '/src/pages',
-      '@static': '/src/static',
-      '@utils': '/src/utils',
-      '@utils/constants': '/src/utils/constants',
-      '@utils/api': '/src/utils/api',
-      '@utils/helpers': '/src/utils/helpers',
-      '@utils/hooks': '/src/utils/hooks',
+      '@widgets': '/src/widgets',
       '@features': '/src/features',
-      '@features/*': '/src/features/*'
+      '@shared': '/src/shared',
+      '@shared/ui': '/src/shared/ui',
+      '@shared/api': '/src/shared/api',
+      '@shared/config': '/src/shared/config',
+      '@shared/lib': '/src/shared/lib',
+      '@static': '/src/static'
     }
   }
 });

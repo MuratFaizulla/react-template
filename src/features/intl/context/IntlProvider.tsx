@@ -1,9 +1,8 @@
 import React from 'react';
 
-import { getMessages } from '@utils/helpers';
-import { setCookie } from '@utils/helpers';
-import { COOKIE_NAMES } from '@utils/constants';
-import type { AcceptLocales } from '@utils/helpers';
+import { getMessages, setCookie } from '@shared/lib';
+import { COOKIE_NAMES } from '@shared/config';
+import type { AcceptLocales } from '@shared/lib';
 import type { IntlContextProps } from './IntlContext';
 import { IntlContext } from './IntlContext';
 

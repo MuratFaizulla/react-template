@@ -1,5 +1,5 @@
 import React from 'react';
-import type { AcceptLocales } from '@utils/helpers';
+import type { AcceptLocales } from '@shared/lib';
 
 export interface IntlContextProps {
   locale: AcceptLocales;

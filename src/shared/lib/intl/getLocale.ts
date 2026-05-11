@@ -1,5 +1,5 @@
 import { getCookie } from '../cookies';
-import { COOKIE_NAMES } from '../../constants';
+import { COOKIE_NAMES } from '../../config';
 
 const ACCEPT_LOCALES = ['kk', 'ru', 'en-US'] as const;
 export const DEFAULT_LOCALE = ACCEPT_LOCALES[1];

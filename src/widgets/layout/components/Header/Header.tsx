@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { useTheme } from '@features';
 import { useIntl } from '@features';
-import { ROUTES } from '@utils/constants';
-import type { AcceptLocales } from '@utils/helpers';
+import { ROUTES } from '@shared/config';
+import type { AcceptLocales } from '@shared/lib';
 
 import styles from './Header.module.css';
 
