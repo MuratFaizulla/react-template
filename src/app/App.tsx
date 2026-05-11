@@ -4,7 +4,6 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import {
   AboutPage,
   AdminPage,
-  CabinetPage,
   HomePage,
   LoginPage,
   NotFoundPage,
@@ -47,11 +46,6 @@ const App = () => {
                   {/* Public routes */}
                   <Route path={ROUTES.HOME} element={<HomePage />} />
                   <Route path={ROUTES.ABOUT} element={<AboutPage />} />
-
-                  {/* Protected: any authenticated user */}
-                  <Route element={<ProtectedRoute />}>
-                    <Route path={ROUTES.CABINET} element={<CabinetPage />} />
-                  </Route>
 
                   {/* Protected: admin only */}
                   <Route element={<ProtectedRoute roles={['admin']} />}>
