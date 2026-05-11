@@ -2,9 +2,10 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { HomePage, LoginPage, NotFoundPage, RegistrationPage } from '@pages';
-import { deleteCookie, getCookie, getLocale, getMessages } from '@utils/helpers';
-import { IntlProvider, ThemeProvider, Layout, type Theme } from '@features';
-import { COOKIE_NAMES, ROUTES } from '@utils/constants';
+import { deleteCookie, getCookie, getLocale, getMessages } from '@shared/lib';
+import { IntlProvider, ThemeProvider, type Theme } from '@features';
+import { Layout } from '@widgets';
+import { COOKIE_NAMES, ROUTES } from '@shared/config';
 
 import './App.css';
 

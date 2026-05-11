@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { MIN_LENGHT } from '@utils/constants';
+import { MIN_LENGHT } from '@shared/config';
 import { PasswordRule } from './PasswordRule/PasswordRule';
 
 interface PasswordRulesProps {

@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 
-import { Input, PasswordInput, CheckBox } from '@common/fields';
-import { Button } from '@common/buttons';
+import { Input, PasswordInput, CheckBox } from '@shared/ui/fields';
+import { Button } from '@shared/ui/buttons';
 
-import { api, setCookie, useForm, useMutation } from '@utils';
+import { api, setCookie, useForm, useMutation } from '@shared';
 import { IntlText } from '@features';
-import { COOKIE_NAMES } from '@utils/constants';
+import { COOKIE_NAMES } from '@shared/config';
 
 import styles from './LoginPage.module.css';
 

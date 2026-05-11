@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { setCookie } from '@utils/helpers';
-import { COOKIE_NAMES } from '@utils/constants';
+import { setCookie } from '@shared/lib';
+import { COOKIE_NAMES } from '@shared/config';
 import type { ThemeContextProps, Theme } from './ThemeContext';
 import { ThemeContext } from './ThemeContext';
 import darkTheme from '../../../static/theme/dark/dark.module.css';

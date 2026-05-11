@@ -1,6 +1,6 @@
 # React + TypeScript Starter Template
 
-A clean, scalable, and production-ready starter template for building React applications.
+A clean, scalable, production-ready starter template built on **Feature-Sliced Design (FSD)** architecture.
 
 ## Tech Stack
 
@@ -33,19 +33,14 @@ npm install
 ### Development
 
 ```bash
-npm run dev
+npm run dev       # localhost:5173
 ```
 
 ### Build
 
 ```bash
-npm run build
-```
-
-### Preview production build
-
-```bash
-npm run preview
+npm run build     # tsc -b && vite build
+npm run preview   # preview production build
 ```
 
 ---
@@ -63,70 +58,123 @@ npm run preview
 
 ---
 
+## Architecture — Feature-Sliced Design (FSD)
+
+The project follows canonical **FSD** — each layer can only import from layers below it.
+
+```
+app  →  pages  →  widgets  →  features  →  shared
+```
+
+### Layer overview
+
+| Layer | Path | Responsibility |
+|-------|------|----------------|
+| `app` | `src/app/` | Root component, router, providers |
+| `pages` | `src/pages/` | Route-level page components |
+| `widgets` | `src/widgets/` | Composite UI blocks (Header, Layout) |
+| `features` | `src/features/` | Self-contained feature modules (intl, theming) |
+| `shared` | `src/shared/` | Reusable primitives, utilities, API client |
+
+### Import rules
+
+```
+pages     → can import from widgets, features, shared
+widgets   → can import from features, shared
+features  → can import from shared only
+shared    → no internal project imports (base layer)
+```
+
+**Never import upward.** Example: `features` must NOT import from `widgets` or `pages`.
+
+---
+
 ## Project Structure
 
 ```
 src/
-├── @types/             # Global TypeScript declarations
-├── common/             # Shared UI components
-│   ├── buttons/        # Button components
-│   └── fields/         # Input components (Input, PasswordInput, CheckBox)
-├── features/           # Feature modules (isolated, self-contained)
-│   ├── intl/           # Internationalization (i18n)
-│   └── theming/        # Theme management (light / dark)
-├── pages/              # Route-level page components
-├── static/             # Static assets
-│   ├── css/            # Global styles & fonts
-│   ├── images/         # Image assets
-│   ├── locales/        # Translation files (ru, kk, en-US)
-│   └── theme/          # CSS Modules per theme (light / dark)
-├── utils/              # Utilities, hooks, helpers
-│   ├── api/            # HTTP client (fetch-based)
-│   ├── constants/      # App-wide constants
-│   ├── helpers/        # Pure helper functions
-│   └── hooks/          # Custom React hooks (useForm, useQuery, useMutation)
-├── App.tsx             # Root component
-└── main.tsx            # Entry point
+├── @types/                        # Global TypeScript declarations
+├── app/                           # App entry: root component + providers
+│   ├── App.tsx
+│   └── index.ts
+├── pages/                         # Route-level page components
+│   ├── HomePage/
+│   ├── LoginPage/
+│   ├── RegistrationPage/
+│   │   └── PasswordRules/         # Sub-components scoped to this page
+│   ├── NotFoundPage/
+│   └── index.ts
+├── widgets/                       # Composite UI blocks
+│   └── layout/
+│       └── components/
+│           ├── Header/
+│           ├── Footer/
+│           └── Layout/
+├── features/                      # Feature modules (context + hooks + components)
+│   ├── intl/                      # Internationalization
+│   └── theming/                   # Light / dark theme
+├── shared/                        # Base layer — pure utilities and primitives
+│   ├── ui/                        # Pure UI components (no feature hooks)
+│   │   ├── buttons/               # Button
+│   │   └── fields/inputs/         # Input, PasswordInput, CheckBox
+│   ├── api/                       # API class and instance
+│   ├── config/                    # Constants: COOKIE_NAMES, ROUTES, MIN_LENGTH
+│   ├── lib/                       # Helpers and hooks
+│   │   ├── cookies/               # getCookie, setCookie, deleteCookie
+│   │   ├── intl/                  # getLocale, getMessages
+│   │   ├── validations/           # validateIsEmpty
+│   │   └── hooks/
+│   │       ├── api/               # useQuery, useQueryLazy, useMutation
+│   │       └── form/              # useForm
+│   └── index.ts
+├── static/                        # Static assets (not imported via aliases in logic)
+│   ├── css/                       # Global styles & fonts
+│   ├── images/                    # Image assets
+│   ├── locales/                   # Translation files (ru, kk, en-US)
+│   └── theme/                     # CSS Modules per theme (light / dark)
+└── main.tsx                       # Entry point
 ```
 
 ---
 
 ## Path Aliases
 
-Configured in `vite.config.ts`.
-
-```typescript
-// Instead of relative paths
-import { Button } from '../../../common/buttons';
-
-// Use aliases
-import { Button } from '@common/buttons';
-import { useForm } from '@utils/hooks';
-import { LoginPage } from '@pages';
-```
+Configured in `vite.config.ts` and `tsconfig.app.json`.
 
 | Alias | Resolves to |
 |-------|-------------|
 | `@` | `src/` |
-| `@common` | `src/common/` |
+| `@app` | `src/app/` |
 | `@pages` | `src/pages/` |
-| `@static` | `src/static/` |
-| `@utils` | `src/utils/` |
-| `@utils/constants` | `src/utils/constants/` |
-| `@utils/api` | `src/utils/api/` |
-| `@utils/helpers` | `src/utils/helpers/` |
-| `@utils/hooks` | `src/utils/hooks/` |
+| `@widgets` | `src/widgets/` |
 | `@features` | `src/features/` |
+| `@shared` | `src/shared/` |
+| `@shared/ui` | `src/shared/ui/` |
+| `@shared/api` | `src/shared/api/` |
+| `@shared/config` | `src/shared/config/` |
+| `@shared/lib` | `src/shared/lib/` |
+| `@static` | `src/static/` |
+
+```tsx
+// Use aliases instead of relative paths
+import { Layout } from '@widgets';
+import { useTheme, IntlText } from '@features';
+import { Button } from '@shared/ui/buttons';
+import { api, useForm } from '@shared';
+import { ROUTES } from '@shared/config';
+```
 
 ---
 
 ## Internationalization (i18n)
 
-Built-in lightweight i18n system supporting **Russian**, **Kazakh**, and **English**.
+Built-in lightweight i18n supporting **Russian**, **Kazakh**, and **English**.
 
-Translation files are in `src/static/locales/`. Locale is auto-detected from `navigator.language`, falls back to `ru`.
+Locale is auto-detected: cookie → `navigator.language` → fallback `ru`.
 
 **Supported locales:** `ru` · `kk` · `en-US`
+
+Translation files: `src/static/locales/{ru,kk,en-US}.json`
 
 ### Usage
 
@@ -135,7 +183,7 @@ Translation files are in `src/static/locales/`. Locale is auto-detected from `na
 <IntlText path='button.signIn' />
 
 // With variable substitution
-<IntlText path='page.greeting' values={{ name: 'Murat' }} />
+<IntlText path='footer.copyright' values={{ year: 2025 }} />
 
 // With rich text tags
 <IntlText
@@ -144,15 +192,17 @@ Translation files are in `src/static/locales/`. Locale is auto-detected from `na
 />
 
 // Programmatic
-const { translateMessage } = useIntl();
+const { translateMessage, setLocale } = useIntl();
 const label = translateMessage('field.input.username.label');
+setLocale('en-US');
 ```
 
-Translation key format in JSON:
+Translation key format:
 
 ```json
 {
   "button.signIn": "Sign in",
+  "footer.copyright": "© {year} React Template",
   "page.registration.passwordRules.containNumbers": "Must contain <rule>at least one number</rule>"
 }
 ```
@@ -170,7 +220,7 @@ const { theme, setTheme } = useTheme();
 setTheme('dark');
 ```
 
-Theme CSS variables are in:
+CSS variables per theme:
 - `src/static/theme/light/light.module.css`
 - `src/static/theme/dark/dark.module.css`
 
@@ -190,7 +240,7 @@ const { values, errors, setFieldValue, handleSubmit, isSubmitting } = useForm({
     password: (value) => (!value ? 'Required' : null),
   },
   validateOnChange: false,
-  onSubmit: (values) => api.post('auth', values),
+  onSubmit: async (values) => { /* ... */ },
 });
 ```
 
@@ -210,12 +260,12 @@ const data = await mutationAsync({ username, password });
 
 ### `useQuery`
 
-Fires on mount, cancels on unmount.
+Fires on mount, cancels on unmount, re-fires when deps change.
 
 ```tsx
 const { data, isLoading, error } = useQuery(
   () => api.get('users'),
-  [userId] // re-fetch when userId changes
+  [userId]
 );
 ```
 
@@ -225,34 +275,28 @@ Same as `useQuery` but triggered manually.
 
 ```tsx
 const { query, data, isLoading } = useQueryLazy(() => api.get('profile'));
-
-await query(); // call when needed
+await query();
 ```
 
 ---
 
 ## HTTP Client
 
-A thin wrapper around the native `fetch` API in `src/utils/api/instance.ts`. Sends cookies with every request (`credentials: 'include'`). Base URL: `http://localhost:3000/api/`.
+Thin wrapper around native `fetch` in `src/shared/api/instance.ts`. Sends cookies with every request (`credentials: 'include'`). Base URL: `http://localhost:3000/api/`.
 
 ```typescript
-// GET
-const response = await api.get<User[]>('users');
+import { api } from '@shared';
 
-// POST
+const response = await api.get<User[]>('users');
 const response = await api.post<User>('auth/login', { username, password });
 ```
 
-All responses follow a unified type:
+Unified response type:
 
 ```typescript
 type ApiResponse<T> = ApiSuccessResponse<T> | ApiFailureResponse;
-
-// Success
-{ success: true,  data: T,                  status: number }
-
-// Failure
-{ success: false, data: { message: string }, status: number }
+// { success: true,  data: T,                  status: number }
+// { success: false, data: { message: string }, status: number }
 ```
 
 ---
@@ -261,31 +305,54 @@ type ApiResponse<T> = ApiSuccessResponse<T> | ApiFailureResponse;
 
 Auth state is determined on app load by reading the `react-template-auth-token` cookie.
 
-- **Unauthenticated** → `AuthRoutes` (`/auth`, `/registration`)
-- **Authenticated** → `MainRoutes`
-
-After a successful login, call `onAuthSuccess()` — the app switches to `MainRoutes` without a page reload.
+After a successful login, call `onAuthSuccess()` — the app updates auth state without a page reload.
 
 Session expiry is controlled by the `react-template-isNotMyDevice` cookie (30-minute TTL when "not my device" is checked).
 
 ---
 
+## CSS Modules
+
+All component styles use **CSS Modules** (`.module.css`). Class names are scoped to the component automatically.
+
+```tsx
+import styles from './Button.module.css';
+
+<button className={styles.button}>Click</button>
+```
+
+Naming convention: `snake_case` for class names in CSS Modules.
+
+---
+
+## Barrel Exports
+
+Every folder with multiple files exposes a single `index.ts` for clean imports.
+
+```
+shared/ui/buttons/
+  Button/Button.tsx
+  index.ts             ← export * from './Button/Button'
+```
+
+Import via the folder, not the file:
+```tsx
+import { Button } from '@shared/ui/buttons';   // correct
+import { Button } from '@shared/ui/buttons/Button/Button';  // avoid
+```
+
+---
+
 ## Git Workflow
 
-Direct pushes to `main` are blocked by a local `pre-push` hook and GitHub branch protection rules.
+Direct pushes to `main` are blocked. Always use a feature branch → PR:
 
 ```bash
-# 1. Create a feature branch
 git checkout -b feat/your-feature
-
-# 2. Make changes and commit
-git add .
+git add <files>
 git commit -m "feat: your feature description"
-
-# 3. Push the branch
 git push origin feat/your-feature
-
-# 4. Open a PR on GitHub → main
+# open PR on GitHub → main
 ```
 
 ### Branch naming
@@ -297,6 +364,25 @@ git push origin feat/your-feature
 | `refactor/` | Refactoring |
 | `chore/` | Config, tooling, dependencies |
 | `docs/` | Documentation |
+
+---
+
+## Commit Convention
+
+Follows [Conventional Commits](https://www.conventionalcommits.org/).
+
+| Type | Description |
+|------|-------------|
+| `feat` | New feature |
+| `fix` | Bug fix |
+| `refactor` | Code refactoring without behavior change |
+| `style` | Formatting only |
+| `chore` | Config, dependencies, tooling |
+| `docs` | Documentation changes |
+| `perf` | Performance improvement |
+| `build` | Build system changes |
+| `ci` | CI/CD changes |
+| `revert` | Revert a previous commit |
 
 ---
 
@@ -324,35 +410,9 @@ Configured in global `~/.gitconfig`:
 
 | Setting | Value | Effect |
 |---------|-------|--------|
-| `pull.rebase` | `true` | `git pull` uses rebase instead of merge — keeps history linear |
-| `rebase.autoStash` | `true` | Auto-stashes uncommitted changes before rebase, restores after |
-| `rerere.enabled` | `true` | Remembers conflict resolutions and reapplies them automatically |
-
----
-
-## Commit Convention
-
-Follows [Conventional Commits](https://www.conventionalcommits.org/).
-
-| Type | Description |
-|------|-------------|
-| `feat` | New feature |
-| `fix` | Bug fix |
-| `refactor` | Code refactoring without behavior change |
-| `style` | Formatting only |
-| `chore` | Config, dependencies, tooling |
-| `docs` | Documentation changes |
-| `perf` | Performance improvement |
-| `build` | Build system changes |
-| `ci` | CI/CD changes |
-| `revert` | Revert a previous commit |
-
-```bash
-feat: add user profile page
-fix: resolve token expiration on refresh
-chore: upgrade vite to v7
-docs: update README with theming section
-```
+| `pull.rebase` | `true` | `git pull` uses rebase — keeps history linear |
+| `rebase.autoStash` | `true` | Auto-stashes uncommitted changes before rebase |
+| `rerere.enabled` | `true` | Remembers and reapplies conflict resolutions |
 
 ---
 
