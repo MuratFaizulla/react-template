@@ -1,8 +1,6 @@
-import React from 'react';
-
-import { NotificationsContext } from '../context/NotificationsContext';
+import { useNotificationsStore } from '../model/notificationsStore';
 
 export const useToast = () => {
-  const { showToast } = React.useContext(NotificationsContext);
+  const showToast = useNotificationsStore((state) => state.showToast);
   return { showToast };
 };
