@@ -379,7 +379,7 @@ const validateSchema = {
 
 ## Adding a new entity (future: `src/entities/`)
 
-When the project grows to include domain models (Patient, Doctor, Appointment for a dental CRM), add a new `entities/` layer between `features` and `shared`:
+When the project grows to include domain models, add a new `entities/` layer between `features` and `shared`:
 
 ```
 app → pages → widgets → features → entities → shared
