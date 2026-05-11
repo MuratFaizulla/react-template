@@ -2,34 +2,82 @@ import React from 'react';
 
 import styles from './AboutPage.module.css';
 
-const FEATURES = [
-  { icon: '⚡', title: 'Vite 7 + React 19', desc: 'Lightning fast dev server and builds' },
-  { icon: '🏗️', title: 'FSD Architecture', desc: 'Feature-Sliced Design for scalable structure' },
-  { icon: '🔐', title: 'Auth + RBAC', desc: 'Cookie-based auth with role-based access control' },
-  { icon: '🌍', title: 'i18n (ru / kk / en)', desc: 'Multi-language support out of the box' },
-  { icon: '🎨', title: 'Theming', desc: 'Light and dark theme with CSS variables' },
-  { icon: '📦', title: 'Zustand', desc: 'Global state management without boilerplate' },
-  { icon: '🛡️', title: 'Error Boundary', desc: 'Graceful error handling with fallback UI' },
-  { icon: '🔔', title: 'Toast system', desc: 'Global notifications: success, error, warning, info' }
+const TEAM = [
+  { name: 'Alex Morgan', role: 'Founder & CEO', avatar: '👨‍💼' },
+  { name: 'Sara Kim', role: 'Lead Designer', avatar: '👩‍🎨' },
+  { name: 'Ivan Petrov', role: 'Frontend Engineer', avatar: '👨‍💻' },
+  { name: 'Maria Chen', role: 'Product Manager', avatar: '👩‍💼' }
+];
+
+const VALUES = [
+  {
+    icon: '💡',
+    title: 'Innovation',
+    desc: 'We embrace new ideas and modern technologies to solve real problems.'
+  },
+  {
+    icon: '🤝',
+    title: 'Collaboration',
+    desc: 'Great products are built by great teams. We believe in open communication.'
+  },
+  {
+    icon: '⭐',
+    title: 'Quality',
+    desc: 'We take pride in every detail — from code architecture to user experience.'
+  }
 ];
 
 export const AboutPage: React.FC = () => (
   <div className={styles.page}>
-    <div className={styles.hero}>
-      <h1 className={styles.title}>About this template</h1>
-      <p className={styles.subtitle}>
-        A production-ready React starter template with everything you need to build modern web apps.
+    <section className={styles.hero}>
+      <div className={styles.hero_badge}>About us</div>
+      <h1 className={styles.hero_title}>
+        We build tools that <span>developers love</span>
+      </h1>
+      <p className={styles.hero_subtitle}>
+        We are a small team of passionate engineers and designers on a mission to make modern web
+        development faster, simpler and more enjoyable for everyone.
       </p>
-    </div>
+    </section>
 
-    <div className={styles.grid}>
-      {FEATURES.map(({ icon, title, desc }) => (
-        <div key={title} className={styles.card}>
-          <span className={styles.icon}>{icon}</span>
-          <h3 className={styles.card_title}>{title}</h3>
-          <p className={styles.card_desc}>{desc}</p>
+    <section className={styles.section}>
+      <div className={styles.mission_card}>
+        <span className={styles.mission_icon}>🎯</span>
+        <div>
+          <h2 className={styles.mission_title}>Our mission</h2>
+          <p className={styles.mission_text}>
+            To provide developers with a production-ready foundation so they can focus on building
+            features that matter — not on setting up boilerplate. We obsess over architecture,
+            developer experience and code quality so you don&apos;t have to.
+          </p>
         </div>
-      ))}
-    </div>
+      </div>
+    </section>
+
+    <section className={styles.section}>
+      <h2 className={styles.section_title}>Our values</h2>
+      <div className={styles.values_grid}>
+        {VALUES.map(({ icon, title, desc }) => (
+          <div key={title} className={styles.value_card}>
+            <span className={styles.value_icon}>{icon}</span>
+            <h3 className={styles.value_title}>{title}</h3>
+            <p className={styles.value_desc}>{desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section className={styles.section}>
+      <h2 className={styles.section_title}>Meet the team</h2>
+      <div className={styles.team_grid}>
+        {TEAM.map(({ name, role, avatar }) => (
+          <div key={name} className={styles.team_card}>
+            <div className={styles.team_avatar}>{avatar}</div>
+            <h3 className={styles.team_name}>{name}</h3>
+            <span className={styles.team_role}>{role}</span>
+          </div>
+        ))}
+      </div>
+    </section>
   </div>
 );

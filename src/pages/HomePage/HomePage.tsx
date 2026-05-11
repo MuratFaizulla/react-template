@@ -1,24 +1,42 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useAuth, IntlText } from '@features';
+import { useAuth } from '@features';
 import { ROUTES } from '@shared/config';
 
 import styles from './HomePage.module.css';
 
-const STATS = [
-  { icon: '👥', value: '1,284', trendKey: '+12%', labelKey: 'home.stats.users' },
-  { icon: '⚡', value: '3,920', trendKey: '+8%', labelKey: 'home.stats.sessions' },
-  { icon: '🟢', value: '99.9%', trendKey: '+0.1%', labelKey: 'home.stats.uptime' },
-  { icon: '📡', value: '48.2k', trendKey: '+23%', labelKey: 'home.stats.requests' }
-];
-
-const ACTIVITY = [
-  { text: 'New user registered', time: '2 min ago' },
-  { text: 'API request limit updated', time: '15 min ago' },
-  { text: 'Server health check passed', time: '1 hr ago' },
-  { text: 'Database backup completed', time: '3 hr ago' },
-  { text: 'New session started', time: '5 hr ago' }
+const FEATURES = [
+  {
+    icon: '🚀',
+    title: 'Fast & Modern Stack',
+    desc: 'Built on React 19, Vite 7 and TypeScript. Instant hot-reload and optimized production builds out of the box.'
+  },
+  {
+    icon: '🏗️',
+    title: 'Scalable Architecture',
+    desc: 'Feature-Sliced Design keeps your codebase clean as it grows. Every layer knows its responsibilities.'
+  },
+  {
+    icon: '🔐',
+    title: 'Auth & Access Control',
+    desc: 'Cookie-based authentication with role-based route guards. Protect pages with a single prop.'
+  },
+  {
+    icon: '🎨',
+    title: 'Theming & i18n',
+    desc: 'Light and dark themes plus multi-language support (RU / KK / EN) ready from day one.'
+  },
+  {
+    icon: '📦',
+    title: 'Global State',
+    desc: 'Zustand stores for notifications and any future state. No Provider boilerplate required.'
+  },
+  {
+    icon: '🛡️',
+    title: 'Error Handling',
+    desc: 'Error Boundary catches runtime errors and shows a friendly fallback instead of a blank screen.'
+  }
 ];
 
 export const HomePage: React.FC = () => {
@@ -27,60 +45,52 @@ export const HomePage: React.FC = () => {
 
   return (
     <div className={styles.page}>
-      <div className={styles.hero}>
-        <h1 className={styles.welcome}>
-          <IntlText path='home.welcome' /> <span>👋</span>
+      <section className={styles.hero}>
+        <div className={styles.hero_badge}>Production-ready React template</div>
+        <h1 className={styles.hero_title}>
+          Build your next app
+          <br />
+          <span>faster than ever</span>
         </h1>
-        <p className={styles.subtitle}>
-          <IntlText path='home.subtitle' />
+        <p className={styles.hero_subtitle}>
+          Everything you need to start a modern web project — architecture, auth, theming, i18n,
+          state management and more. All wired up and ready to go.
         </p>
 
         {isAuth ? (
-          <div className={styles.cabinet_banner}>
-            <span className={styles.cabinet_banner_text}>
-              {role === 'admin' ? '👑 Logged in as Administrator' : '👤 Logged in as User'}
-            </span>
-            <button className={styles.cabinet_btn} onClick={() => navigate(ROUTES.CABINET)}>
+          <div className={styles.hero_auth_row}>
+            <div className={styles.auth_badge}>
+              {role === 'admin' ? '👑' : '👤'}&nbsp;
+              {role === 'admin' ? 'Administrator' : 'User'}
+            </div>
+            <button className={styles.btn_primary} onClick={() => navigate(ROUTES.CABINET)}>
               My Cabinet →
             </button>
           </div>
         ) : (
-          <div className={styles.guest_actions}>
+          <div className={styles.hero_actions}>
             <button className={styles.btn_primary} onClick={() => navigate(ROUTES.AUTH)}>
-              Sign In
+              Get started
             </button>
-            <button className={styles.btn_secondary} onClick={() => navigate(ROUTES.REGISTRATION)}>
-              Register
+            <button className={styles.btn_ghost} onClick={() => navigate(ROUTES.ABOUT)}>
+              Learn more →
             </button>
           </div>
         )}
-      </div>
+      </section>
 
-      <div className={styles.stats_grid}>
-        {STATS.map(({ icon, value, trendKey, labelKey }) => (
-          <div key={labelKey} className={styles.stat_card}>
-            <div className={styles.stat_icon}>{icon}</div>
-            <div className={styles.stat_value}>{value}</div>
-            <div className={styles.stat_label}>
-              <IntlText path={labelKey} />
-            </div>
-            <div className={styles.stat_trend}>{trendKey} this week</div>
-          </div>
-        ))}
-      </div>
-
-      <div>
-        <h2 className={styles.section_title}>Recent activity</h2>
-        <div className={styles.activity_list}>
-          {ACTIVITY.map(({ text, time }) => (
-            <div key={text} className={styles.activity_item}>
-              <div className={styles.activity_dot} />
-              <span className={styles.activity_text}>{text}</span>
-              <span className={styles.activity_time}>{time}</span>
+      <section className={styles.features}>
+        <h2 className={styles.section_title}>What&apos;s included</h2>
+        <div className={styles.features_grid}>
+          {FEATURES.map(({ icon, title, desc }) => (
+            <div key={title} className={styles.feature_card}>
+              <span className={styles.feature_icon}>{icon}</span>
+              <h3 className={styles.feature_title}>{title}</h3>
+              <p className={styles.feature_desc}>{desc}</p>
             </div>
           ))}
         </div>
-      </div>
+      </section>
     </div>
   );
 };
