@@ -13,9 +13,9 @@ const LOCALES: { value: AcceptLocales; label: string }[] = [
   { value: 'en-US', label: 'EN' }
 ];
 
-const NAV_LINKS = [
-  { label: 'Home', path: ROUTES.HOME },
-  { label: 'About', path: ROUTES.ABOUT }
+const NAV_LINK_KEYS = [
+  { key: 'nav.home', path: ROUTES.HOME },
+  { key: 'nav.about', path: ROUTES.ABOUT }
 ];
 
 export const Header: React.FC = () => {
@@ -36,13 +36,13 @@ export const Header: React.FC = () => {
         </div>
 
         <nav className={styles.nav}>
-          {NAV_LINKS.map(({ label, path }) => (
+          {NAV_LINK_KEYS.map(({ key, path }) => (
             <button
               key={path}
               className={`${styles.nav_link} ${pathname === path ? styles.nav_link_active : ''}`}
               onClick={() => navigate(path)}
             >
-              {label}
+              {translateMessage(key)}
             </button>
           ))}
           {isAuth && (
@@ -50,7 +50,7 @@ export const Header: React.FC = () => {
               className={`${styles.nav_link} ${pathname === ROUTES.CABINET ? styles.nav_link_active : ''}`}
               onClick={() => navigate(ROUTES.CABINET)}
             >
-              Cabinet
+              {translateMessage('nav.cabinet')}
             </button>
           )}
         </nav>
