@@ -1,8 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useTheme } from '@features';
-import { useIntl } from '@features';
+import { useTheme, useIntl, useAuth } from '@features';
 import { ROUTES } from '@shared/config';
 import type { AcceptLocales } from '@shared/lib';
 
@@ -14,13 +13,10 @@ const LOCALES: { value: AcceptLocales; label: string }[] = [
   { value: 'en-US', label: 'EN' }
 ];
 
-interface HeaderProps {
-  isAuth?: boolean;
-}
-
-export const Header: React.FC<HeaderProps> = ({ isAuth = false }) => {
+export const Header: React.FC = () => {
   const { theme, setTheme } = useTheme();
   const { locale, setLocale, translateMessage } = useIntl();
+  const { isAuth } = useAuth();
   const navigate = useNavigate();
 
   const toggleTheme = () => setTheme(theme === 'light' ? 'dark' : 'light');

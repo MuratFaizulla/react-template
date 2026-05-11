@@ -2,10 +2,9 @@ import { useNavigate } from 'react-router-dom';
 
 import { Input, PasswordInput, CheckBox } from '@shared/ui/fields';
 import { Button } from '@shared/ui/buttons';
-
 import { api, setCookie, useForm, useMutation } from '@shared';
-import { IntlText } from '@features';
-import { COOKIE_NAMES } from '@shared/config';
+import { IntlText, useAuth } from '@features';
+import { COOKIE_NAMES, ROUTES } from '@shared/config';
 
 import styles from './LoginPage.module.css';
 
@@ -14,13 +13,10 @@ const validateIsEmpty = (value: string) => {
   return null;
 };
 
-const validateUsername = (value: string) => validateIsEmpty(value);
-const validatePassword = (value: string) => validateIsEmpty(value);
-
 const loginFormValidateSchema = {
-  username: validateUsername,
-  password: validatePassword,
-  isNotMyDevice: () => null // value больше не нужен
+  username: (value: string) => validateIsEmpty(value),
+  password: (value: string) => validateIsEmpty(value),
+  isNotMyDevice: () => null
 };
 
 type FormValues = {
@@ -34,12 +30,9 @@ interface User {
   password: string;
 }
 
-interface LoginPageProps {
-  onAuthSuccess: () => void;
-}
-
-export const LoginPage = ({ onAuthSuccess }: LoginPageProps) => {
+export const LoginPage = () => {
   const navigate = useNavigate();
+  const { setIsAuth } = useAuth();
 
   const { mutationAsync: authMutation } = useMutation<FormValues, User[]>(
     (values) => api.post('auth', values)
@@ -56,7 +49,10 @@ export const LoginPage = ({ onAuthSuccess }: LoginPageProps) => {
         setCookie(COOKIE_NAMES.IS_NOT_MY_DEVICE, new Date().getTime() + 30 * 60000);
       }
 
-      if (response) onAuthSuccess();
+      if (response) {
+        setIsAuth(true);
+        navigate(ROUTES.HOME);
+      }
     }
   });
 
@@ -105,7 +101,7 @@ export const LoginPage = ({ onAuthSuccess }: LoginPageProps) => {
           tabIndex={0}
           aria-hidden='true'
           className={styles.sing_up_container}
-          onClick={() => navigate('/registration')}
+          onClick={() => navigate(ROUTES.REGISTRATION)}
         >
           <IntlText path='page.login.createNewAccont' />
         </div>
