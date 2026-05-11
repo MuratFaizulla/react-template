@@ -1,4 +1,6 @@
+export * from './AboutPage/AboutPage';
 export * from './AdminPage/AdminPage';
+export * from './CabinetPage/CabinetPage';
 export * from './HomePage/HomePage';
 export * from './LoginPage/LoginPage';
 export * from './NotFoundPage/NotFoundPage';

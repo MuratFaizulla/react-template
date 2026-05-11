@@ -54,3 +54,43 @@
   color: var(--color-accent);
   cursor: pointer;
 }
+
+.demo_section {
+  width: 100%;
+  padding: 0 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.demo_label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-placeholder);
+  text-align: center;
+}
+
+.demo_buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.demo_btn {
+  flex: 1;
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1.5px solid var(--color-accent);
+  background: transparent;
+  color: var(--color-accent);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.demo_btn:hover {
+  background: var(--background-color-field-focused);
+}
