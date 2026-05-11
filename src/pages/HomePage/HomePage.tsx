@@ -43,9 +43,6 @@ export const HomePage: React.FC = () => {
                 ? translateMessage('home.hero.role.admin')
                 : translateMessage('home.hero.role.user')}
             </div>
-            <button className={styles.btn_primary} onClick={() => navigate(ROUTES.CABINET)}>
-              {translateMessage('home.hero.myCabinet')}
-            </button>
           </div>
         ) : (
           <div className={styles.hero_actions}>

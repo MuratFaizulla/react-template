@@ -45,14 +45,6 @@ export const Header: React.FC = () => {
               {translateMessage(key)}
             </button>
           ))}
-          {isAuth && (
-            <button
-              className={`${styles.nav_link} ${pathname === ROUTES.CABINET ? styles.nav_link_active : ''}`}
-              onClick={() => navigate(ROUTES.CABINET)}
-            >
-              {translateMessage('nav.cabinet')}
-            </button>
-          )}
         </nav>
       </div>
 
