@@ -4,14 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { HomePage, LoginPage, NotFoundPage, RegistrationPage } from '@pages';
 import { getLocale, getMessages, getCookie } from '@shared/lib';
 import { ErrorBoundary } from '@shared/ui';
-import {
-  IntlProvider,
-  ThemeProvider,
-  AuthProvider,
-  NotificationsProvider,
-  ToastContainer,
-  type Theme
-} from '@features';
+import { IntlProvider, ThemeProvider, AuthProvider, ToastContainer, type Theme } from '@features';
 import { Layout } from '@widgets';
 import { COOKIE_NAMES, ROUTES } from '@shared/config';
 
@@ -39,23 +32,21 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <IntlProvider locale={locale} messages={messages}>
           <AuthProvider>
-            <NotificationsProvider>
-              <BrowserRouter>
-                <Layout>
-                  <Routes>
-                    <Route element={<ProtectedRoute />}>
-                      <Route path={ROUTES.HOME} element={<HomePage />} />
-                    </Route>
-                    <Route element={<GuestRoute />}>
-                      <Route path={ROUTES.AUTH} element={<LoginPage />} />
-                      <Route path={ROUTES.REGISTRATION} element={<RegistrationPage />} />
-                    </Route>
-                    <Route path='*' element={<NotFoundPage />} />
-                  </Routes>
-                </Layout>
-              </BrowserRouter>
-              <ToastContainer />
-            </NotificationsProvider>
+            <BrowserRouter>
+              <Layout>
+                <Routes>
+                  <Route element={<ProtectedRoute />}>
+                    <Route path={ROUTES.HOME} element={<HomePage />} />
+                  </Route>
+                  <Route element={<GuestRoute />}>
+                    <Route path={ROUTES.AUTH} element={<LoginPage />} />
+                    <Route path={ROUTES.REGISTRATION} element={<RegistrationPage />} />
+                  </Route>
+                  <Route path='*' element={<NotFoundPage />} />
+                </Routes>
+              </Layout>
+            </BrowserRouter>
+            <ToastContainer />
           </AuthProvider>
         </IntlProvider>
       </ThemeProvider>

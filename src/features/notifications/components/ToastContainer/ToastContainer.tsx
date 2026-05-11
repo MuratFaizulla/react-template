@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { NotificationsContext } from '../../context/NotificationsContext';
+import { useNotificationsStore } from '../../model/notificationsStore';
 import { Toast } from '../Toast/Toast';
 
 import styles from './ToastContainer.module.css';
 
 export const ToastContainer: React.FC = () => {
-  const { toasts } = React.useContext(NotificationsContext);
+  const toasts = useNotificationsStore((state) => state.toasts);
 
   if (!toasts.length) return null;
 
