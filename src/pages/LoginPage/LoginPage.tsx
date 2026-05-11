@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Input, PasswordInput, CheckBox } from '@shared/ui/fields';
 import { Button } from '@shared/ui/buttons';
 import { api, setCookie, useForm, useMutation } from '@shared';
-import { IntlText, useAuth } from '@features';
+import { IntlText, useAuth, type UserRole } from '@features';
 import { COOKIE_NAMES, ROUTES } from '@shared/config';
 
 import styles from './LoginPage.module.css';
@@ -30,12 +30,17 @@ interface User {
   password: string;
 }
 
+const DEMO_ACCOUNTS: { label: string; role: UserRole; emoji: string }[] = [
+  { label: 'Login as User', role: 'user', emoji: '👤' },
+  { label: 'Login as Admin', role: 'admin', emoji: '👑' }
+];
+
 export const LoginPage = () => {
   const navigate = useNavigate();
-  const { setIsAuth } = useAuth();
+  const { setIsAuth, setRole } = useAuth();
 
-  const { mutationAsync: authMutation } = useMutation<FormValues, User[]>(
-    (values) => api.post('auth', values)
+  const { mutationAsync: authMutation } = useMutation<FormValues, User[]>((values) =>
+    api.post('auth', values)
   );
 
   const { values, errors, setFieldValue, handleSubmit } = useForm<FormValues>({
@@ -55,6 +60,14 @@ export const LoginPage = () => {
       }
     }
   });
+
+  const handleDemoLogin = (role: UserRole) => {
+    setCookie(COOKIE_NAMES.AUTH_TOKEN, 'demo-token');
+    setCookie(COOKIE_NAMES.USER_ROLE, role);
+    setIsAuth(true);
+    setRole(role);
+    navigate(ROUTES.HOME);
+  };
 
   return (
     <div className={styles.page}>
@@ -95,6 +108,22 @@ export const LoginPage = () => {
             </Button>
           </div>
         </form>
+
+        <div className={styles.demo_section}>
+          <span className={styles.demo_label}>Demo login</span>
+          <div className={styles.demo_buttons}>
+            {DEMO_ACCOUNTS.map(({ label, role, emoji }) => (
+              <button
+                key={role}
+                className={styles.demo_btn}
+                onClick={() => handleDemoLogin(role)}
+                type='button'
+              >
+                {emoji} {label}
+              </button>
+            ))}
+          </div>
+        </div>
 
         <div
           role='link'

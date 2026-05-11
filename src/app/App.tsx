@@ -2,7 +2,9 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import {
+  AboutPage,
   AdminPage,
+  CabinetPage,
   HomePage,
   LoginPage,
   NotFoundPage,
@@ -42,16 +44,26 @@ const App = () => {
             <BrowserRouter>
               <Layout>
                 <Routes>
+                  {/* Public routes */}
+                  <Route path={ROUTES.HOME} element={<HomePage />} />
+                  <Route path={ROUTES.ABOUT} element={<AboutPage />} />
+
+                  {/* Protected: any authenticated user */}
                   <Route element={<ProtectedRoute />}>
-                    <Route path={ROUTES.HOME} element={<HomePage />} />
+                    <Route path={ROUTES.CABINET} element={<CabinetPage />} />
                   </Route>
+
+                  {/* Protected: admin only */}
                   <Route element={<ProtectedRoute roles={['admin']} />}>
                     <Route path={ROUTES.ADMIN} element={<AdminPage />} />
                   </Route>
+
+                  {/* Guest only */}
                   <Route element={<GuestRoute />}>
                     <Route path={ROUTES.AUTH} element={<LoginPage />} />
                     <Route path={ROUTES.REGISTRATION} element={<RegistrationPage />} />
                   </Route>
+
                   <Route path={ROUTES.UNAUTHORIZED} element={<UnauthorizedPage />} />
                   <Route path='*' element={<NotFoundPage />} />
                 </Routes>
