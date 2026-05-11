@@ -1,64 +1,183 @@
 .page {
   flex: 1;
-  padding: 40px 32px;
-  max-width: 960px;
-  margin: 0 auto;
-  width: 100%;
+  background: var(--background-color);
 }
 
+/* ── Hero ─────────────────────────────── */
 .hero {
-  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 80px 32px 64px;
+  max-width: 720px;
+  margin: 0 auto;
 }
 
-.title {
+.hero_badge {
+  display: inline-block;
+  background: var(--background-color-field);
+  border: 1px solid var(--background-color-field-focused);
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-accent);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+}
+
+.hero_title {
   font-family: 'Baloo', sans-serif;
-  font-size: 36px;
+  font-size: 46px;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--color-text);
+  margin: 0 0 20px;
+}
+
+.hero_title span {
+  color: var(--color-accent);
+}
+
+.hero_subtitle {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--color-placeholder);
+  margin: 0;
+  max-width: 520px;
+}
+
+/* ── Sections ─────────────────────────── */
+.section {
+  padding: 0 32px 60px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.section_title {
+  font-family: 'Baloo', sans-serif;
+  font-size: 26px;
   font-weight: 800;
   color: var(--color-text);
-  margin: 0 0 10px;
+  margin: 0 0 28px;
 }
 
-.subtitle {
+/* ── Mission ──────────────────────────── */
+.mission_card {
+  display: flex;
+  gap: 24px;
+  background: var(--background-color-field);
+  border-radius: 20px;
+  padding: 36px;
+  align-items: flex-start;
+}
+
+.mission_icon {
+  font-size: 40px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.mission_title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 12px;
+}
+
+.mission_text {
   font-size: 15px;
+  line-height: 1.7;
   color: var(--color-placeholder);
   margin: 0;
 }
 
-.grid {
+/* ── Values ───────────────────────────── */
+.values_grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 16px;
 }
 
-.card {
+.value_card {
   background: var(--background-color-field);
   border-radius: 16px;
-  padding: 24px;
+  padding: 28px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   transition: var(--transition);
 }
 
-.card:hover {
+.value_card:hover {
   background: var(--background-color-field-focused);
 }
 
-.icon {
-  font-size: 28px;
+.value_icon {
+  font-size: 30px;
   line-height: 1;
 }
 
-.card_title {
+.value_title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.value_desc {
+  font-size: 13px;
+  color: var(--color-placeholder);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ── Team ─────────────────────────────── */
+.team_grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.team_card {
+  background: var(--background-color-field);
+  border-radius: 16px;
+  padding: 32px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  transition: var(--transition);
+}
+
+.team_card:hover {
+  background: var(--background-color-field-focused);
+}
+
+.team_avatar {
+  font-size: 44px;
+  line-height: 1;
+  background: var(--background-color);
+  border-radius: 50%;
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.team_name {
   font-size: 15px;
   font-weight: 700;
   color: var(--color-text);
   margin: 0;
 }
 
-.card_desc {
-  font-size: 13px;
+.team_role {
+  font-size: 12px;
   color: var(--color-placeholder);
-  margin: 0;
-  line-height: 1.5;
+  font-weight: 500;
 }
