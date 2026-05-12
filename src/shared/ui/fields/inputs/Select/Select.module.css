@@ -1,0 +1,9 @@
+.select {
+  appearance: none;
+  cursor: pointer;
+}
+
+.label_up {
+  transform: translate(-10%, -80%);
+  font-size: 10px;
+}

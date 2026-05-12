@@ -12,7 +12,15 @@ import {
 } from '@pages';
 import { getLocale, getMessages, getCookie } from '@shared/lib';
 import { ErrorBoundary } from '@shared/ui';
-import { IntlProvider, ThemeProvider, AuthProvider, ToastContainer, type Theme } from '@features';
+import {
+  IntlProvider,
+  ThemeProvider,
+  AuthProvider,
+  ModalProvider,
+  ConfirmProvider,
+  ToastContainer,
+  type Theme
+} from '@features';
 import { Layout } from '@widgets';
 import { COOKIE_NAMES, ROUTES } from '@shared/config';
 
@@ -40,29 +48,33 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <IntlProvider locale={locale} messages={messages}>
           <AuthProvider>
-            <BrowserRouter>
-              <Layout>
-                <Routes>
-                  {/* Public routes */}
-                  <Route path={ROUTES.HOME} element={<HomePage />} />
-                  <Route path={ROUTES.ABOUT} element={<AboutPage />} />
+            <ModalProvider>
+              <ConfirmProvider>
+                <BrowserRouter>
+                  <Layout>
+                    <Routes>
+                      {/* Public routes */}
+                      <Route path={ROUTES.HOME} element={<HomePage />} />
+                      <Route path={ROUTES.ABOUT} element={<AboutPage />} />
 
-                  {/* Protected: admin only */}
-                  <Route element={<ProtectedRoute roles={['admin']} />}>
-                    <Route path={ROUTES.ADMIN} element={<AdminPage />} />
-                  </Route>
+                      {/* Protected: admin only */}
+                      <Route element={<ProtectedRoute roles={['admin']} />}>
+                        <Route path={ROUTES.ADMIN} element={<AdminPage />} />
+                      </Route>
 
-                  {/* Guest only */}
-                  <Route element={<GuestRoute />}>
-                    <Route path={ROUTES.AUTH} element={<LoginPage />} />
-                    <Route path={ROUTES.REGISTRATION} element={<RegistrationPage />} />
-                  </Route>
+                      {/* Guest only */}
+                      <Route element={<GuestRoute />}>
+                        <Route path={ROUTES.AUTH} element={<LoginPage />} />
+                        <Route path={ROUTES.REGISTRATION} element={<RegistrationPage />} />
+                      </Route>
 
-                  <Route path={ROUTES.UNAUTHORIZED} element={<UnauthorizedPage />} />
-                  <Route path='*' element={<NotFoundPage />} />
-                </Routes>
-              </Layout>
-            </BrowserRouter>
+                      <Route path={ROUTES.UNAUTHORIZED} element={<UnauthorizedPage />} />
+                      <Route path='*' element={<NotFoundPage />} />
+                    </Routes>
+                  </Layout>
+                </BrowserRouter>
+              </ConfirmProvider>
+            </ModalProvider>
             <ToastContainer />
           </AuthProvider>
         </IntlProvider>

@@ -317,3 +317,112 @@
   background: #3b82f61a;
   color: #2563eb;
 }
+
+/* ── Modal demo content ───────────────── */
+.modal_content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modal_title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.modal_text {
+  font-size: 14px;
+  color: var(--color-placeholder);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.modal_actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ── Confirm result ───────────────────── */
+.result_ok {
+  font-size: 13px;
+  font-weight: 600;
+  color: #16a34a;
+  margin: 0;
+}
+
+.result_cancel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-placeholder);
+  margin: 0;
+}
+
+/* ── Utility hooks demo ───────────────── */
+.demo_input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--background-color-field-focused);
+  background: var(--background-color-field);
+  color: var(--color-text);
+  font-size: 13px;
+  outline: none;
+  transition: var(--transition);
+}
+
+.demo_input:focus {
+  border-color: var(--color-accent);
+}
+
+.hook_label {
+  font-size: 13px;
+  color: var(--color-placeholder);
+  margin: 0;
+}
+
+.hook_value {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.counter_row {
+  display: flex;
+  gap: 8px;
+}
+
+.counter_btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: none;
+  background: var(--color-accent);
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.counter_btn:hover {
+  opacity: 0.88;
+}
+
+.counter_btn_ghost {
+  padding: 0 14px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--background-color-field-focused);
+  background: none;
+  color: var(--color-placeholder);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.counter_btn_ghost:hover {
+  background: var(--background-color-field);
+  color: var(--color-text);
+}
