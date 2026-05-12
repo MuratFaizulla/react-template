@@ -1,0 +1,95 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 600;
+  animation: fadeIn 0.15s ease;
+}
+
+.dialog {
+  background: var(--background-color);
+  border-radius: 16px;
+  padding: 28px 32px 24px;
+  min-width: 300px;
+  max-width: 440px;
+  width: 90%;
+  box-shadow: var(--shadow-container);
+  animation: slideUp 0.2s ease;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 10px;
+}
+
+.message {
+  font-size: 14px;
+  color: var(--color-placeholder);
+  margin: 0 0 24px;
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn_cancel {
+  padding: 9px 20px;
+  border-radius: 10px;
+  border: 1px solid var(--background-color-field-focused);
+  background: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-placeholder);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn_cancel:hover {
+  background: var(--background-color-field);
+  color: var(--color-text);
+}
+
+.btn_confirm {
+  padding: 9px 20px;
+  border-radius: 10px;
+  border: none;
+  background: var(--color-accent);
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-button);
+}
+
+.btn_confirm:hover {
+  opacity: 0.88;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
