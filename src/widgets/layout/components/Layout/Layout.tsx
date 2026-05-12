@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { ToastContainer } from '@features';
 import { Header } from '../Header/Header';
 import { Footer } from '../Footer/Footer';
 
@@ -14,5 +15,6 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => (
     <Header />
     <main className={styles.content}>{children}</main>
     <Footer />
+    <ToastContainer />
   </div>
 );
